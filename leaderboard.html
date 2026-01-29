@@ -87,10 +87,19 @@
         font-family: "Courier New", Courier, monospace;
         cursor: pointer;
         transition: all 0.5s ease;
+        border: 2px solid transparent;
       }
       .force-update:hover{
         transform: translateX(-3px);
         box-shadow: 0 10px 20px rgba(200,0,0,0.5)
+      }
+      .force-update.success{
+        background-color: rgba(0, 200, 0, 0.5);
+        border-color: lime;
+      }
+      .force-update.error{
+        background-color: rgba(200, 0, 0, 0.5);
+        border-color: red;
       }
       body{
         background-image: url("https://thriftyjinxy.com/wp-content/uploads/2018/06/bao-dumpling-baby.jpg");
@@ -120,21 +129,37 @@
       <h2 class="gamemode-title">Blitz</h2>
       <div id="leaderboard-blitz" class="list">Loading...</div>
     </div>
-    <button class="force-update" id = "forcePush">Force Update</button>
+    <button class="force-update" id="forcePush">Force Update</button>
     
     <script>
+      const API = "https://family-complete-walked-borders.trycloudflare.com";
+      
       //force push stuff
-      const sprintBest = parseInt(localStorage.getItem("bestTime"));
-      const blitzBest = parseInt(localStorage.getItem("bestScore"));
+      const sprintBest = parseFloat(localStorage.getItem("bestTime"));
+      const blitzBest = parseFloat(localStorage.getItem("bestScore"));
+      const username = localStorage.getItem("username");
+      
+      console.log("DEBUG: Sprint Best:", sprintBest);
+      console.log("DEBUG: Blitz Best:", blitzBest);
+      console.log("DEBUG: Username:", username);
+      
       function submitSprintScore(finalTime) {
-        const username = localStorage.getItem("username");
-
+        console.log("DEBUG: submitSprintScore called with:", finalTime);
+        
         if (!username) {
-          console.error("No username found in localStorage");
-          return;
+          console.error("ERROR: No username found in localStorage");
+          alert("No username found! Please register first.");
+          return Promise.reject("No username");
+        }
+        
+        if (isNaN(finalTime) || finalTime === null) {
+          console.error("ERROR: Invalid sprint score:", finalTime);
+          alert("No sprint score to submit!");
+          return Promise.reject("Invalid score");
         }
 
-        fetch(API + "/score", {
+        console.log("DEBUG: Sending sprint score to", API + "/score");
+        return fetch(API + "/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -142,21 +167,38 @@
             score: finalTime
           })
         })
-        .then(res => res.json())
-        .then(data => {
-          console.log("Score submitted:", data.user);
+        .then(res => {
+          console.log("DEBUG: Sprint response status:", res.status);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
         })
-        .catch(err => console.error("Score submit failed:", err));
+        .then(data => {
+          console.log("SUCCESS: Sprint score submitted:", data);
+          return data;
+        })
+        .catch(err => {
+          console.error("ERROR: Sprint score submit failed:", err);
+          throw err;
+        });
       }
+      
       function submitBlitzScore(finalScore){
-        const username = localStorage.getItem("username");
-
+        console.log("DEBUG: submitBlitzScore called with:", finalScore);
+        
         if (!username) {
-          console.error("No username found in localStorage");
-          return;
+          console.error("ERROR: No username found in localStorage");
+          alert("No username found! Please register first.");
+          return Promise.reject("No username");
+        }
+        
+        if (isNaN(finalScore) || finalScore === null) {
+          console.error("ERROR: Invalid blitz score:", finalScore);
+          alert("No blitz score to submit!");
+          return Promise.reject("Invalid score");
         }
 
-        fetch(API + "/score-blitz", {
+        console.log("DEBUG: Sending blitz score to", API + "/score-blitz");
+        return fetch(API + "/score-blitz", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -164,20 +206,75 @@
             score: finalScore
           })
         })
-        .then(res => res.json())
-        .then(data => {
-          console.log("Score submitted:", data.user);
+        .then(res => {
+          console.log("DEBUG: Blitz response status:", res.status);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
         })
-        .catch(err => console.error("Score submit failed:", err));
+        .then(data => {
+          console.log("SUCCESS: Blitz score submitted:", data);
+          return data;
+        })
+        .catch(err => {
+          console.error("ERROR: Blitz score submit failed:", err);
+          throw err;
+        });
       }
-      const forcePush = document.getElementById("forcePush");
-      forcePush.addEventListener("click", () =>{
-        submitSprintScore(sprintBest);
-        submitBlitzScore(blitzBest);
-        window.location.reload();
-      });
       
-      const API = "https://family-complete-walked-borders.trycloudflare.com";
+      const forcePush = document.getElementById("forcePush");
+      forcePush.addEventListener("click", async () => {
+        console.log("DEBUG: Force Push button clicked");
+        forcePush.textContent = "Submitting...";
+        forcePush.disabled = true;
+        
+        try {
+          const promises = [];
+          
+          // Only submit scores that exist
+          if (!isNaN(sprintBest) && sprintBest !== null) {
+            promises.push(submitSprintScore(sprintBest));
+          } else {
+            console.warn("WARN: No sprint score to submit");
+          }
+          
+          if (!isNaN(blitzBest) && blitzBest !== null) {
+            promises.push(submitBlitzScore(blitzBest));
+          } else {
+            console.warn("WARN: No blitz score to submit");
+          }
+          
+          if (promises.length === 0) {
+            alert("No scores to submit! Play some games first.");
+            forcePush.textContent = "Force Update";
+            forcePush.disabled = false;
+            return;
+          }
+          
+          // Wait for all submissions to complete
+          await Promise.all(promises);
+          
+          console.log("SUCCESS: All scores submitted successfully!");
+          forcePush.textContent = "Success! ✓";
+          forcePush.classList.add("success");
+          
+          // Reload after 1 second to show updated leaderboard
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+          
+        } catch (err) {
+          console.error("ERROR: Force push failed:", err);
+          forcePush.textContent = "Error! Try Again";
+          forcePush.classList.add("error");
+          forcePush.disabled = false;
+          
+          // Reset button after 3 seconds
+          setTimeout(() => {
+            forcePush.textContent = "Force Update";
+            forcePush.classList.remove("error");
+          }, 3000);
+        }
+      });
       
       // Function to create leaderboard display
       function displayLeaderboard(data, containerId, scoreLabel) {
