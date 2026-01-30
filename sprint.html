@@ -101,6 +101,40 @@
       .back:hover{
         transform: translateX(50px)
       }
+      .record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: record 5s forwards;
+        pointer-events: none;
+      }
+      .second-record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: secondRecord 5s forwards;
+        pointer-events: none
+      }
+      @keyframes record{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:1;}
+        50% {transform: translate(-50%, -40%) scale(5); opacity:0.5;}
+        100% {transform: translate(-50%, -40%) scale(10); opacity:0;}
+      }
+      @keyframes secondRecord{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:0.5;}
+        50% {transform: translate(-50%, -40%) scale(7.5); opacity:0.25;}
+        100% {transform: translate(-50%, -40%) scale(15); opacity:0;}
+      }
     </style>
   </head>
 
@@ -173,6 +207,7 @@
       let mode = "equations";
       let mistakes = 0;
       let keypresses = 0;
+      let recordType = false;
 
       //getting keybinds
       let answerQuestion = localStorage.getItem("answer_question");
@@ -255,6 +290,18 @@
           localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
         }
       }
+      function record(text){
+        const record = document.createElement("p");
+        record.className = "record";
+        record.textContent = text;
+        document.body.appendChild(record);
+
+        const secondRecord = document.createElement("p");
+        secondRecord.className = "second-record";
+        secondRecord.textContent = text;
+        document.body.appendChild(secondRecord);
+        console.log(secondRecord);
+      }
 
       updateEquation();
       updateHighscoreDisplay();
@@ -289,9 +336,8 @@
             let equationsComp = parseInt(totalEquations || 0) + 1;
             localStorage.setItem("totalEquations", equationsComp.toString());
             totalEquations = equationsComp.toString();
-
-            firstNum = Math.floor(Math.random() * 10);
-            secondNum = Math.floor(Math.random() * 10);
+            firstNum = Math.floor(Math.random()*10);
+            secondNum = Math.floor(Math.random()*10);
             switchPhase("reading");
             updateEquation();
             equationsLeft--;
@@ -318,9 +364,42 @@
 
               //high score stuff
               const finalTime = (Date.now() - startTime) / 1000;
-
+              
+              submitFinalScore(finalTime);
+              
+              fetch(API + "/leaderboard")
+                .then(res => {
+                  if (!res.ok) throw new Error('Network response was not ok');
+                  return res.json();
+                })
+                .then(data => {
+                  if(data[0].name === localStorage.getItem("username")&&data[0].score===finalTime){
+                    record("WORLD RECORD");
+                    recordType = true;
+                    
+                  }
+                  if(!recordType){
+                    for(let i = 0; i < data.length; i++){
+                      if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<4){
+                        record("TOP 3");
+                        recordType = true;
+                      }
+                      if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<11){
+                        record("TOP 10");
+                        recordType = true;
+                      }
+                    }
+                  }
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.error("Sprint leaderboard fetch failed:", err);
+                  return;
+                });
+              
               if (bestTime === null || finalTime < bestTime) {
                 bestTime = finalTime;
+                if(!recordType){record("PERSONAL BEST");}
                 localStorage.setItem("bestTime", bestTime.toString());
                 updateHighscoreDisplay();
               }
@@ -336,15 +415,10 @@
               if(avgTypingTime < 0.2){unlockAchievement("twitch");}
               unlockAchievement("first_win");
 
-              equationElement.innerHTML = `Sprint complete!<br>Final Time: ${finalTime}s`;
+              equationElement.innerHTML = `Sprint complete!<br>Final Time: ${finalTime.toFixed(2)}s`;
               answerBox.disabled = true;
               answerBox.value = "";
               
-              
-              submitFinalScore(finalTime);
-              
-              
-              return;
             }
 
           } else {
@@ -360,7 +434,6 @@
           answerBox.value = "";
         }
       });
-
       window.addEventListener('load', () => {
         const savedBg = localStorage.getItem('customBackground');
         if (savedBg) {
@@ -368,7 +441,6 @@
         }
       });
     </script>
-
   </body>
 
 </html>
