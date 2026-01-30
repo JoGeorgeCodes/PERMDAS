@@ -46,8 +46,7 @@
         background-color: rgba(0, 0, 0, 0.7);
         z-index: -1;
       }
-      
-      .sprint {
+      #scene-button{
         text-align: left;
         font-family: "Courier New", Courier, monospace;
         clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
@@ -56,70 +55,31 @@
         transform: translateX(250px);
         padding: 30px 100% 30px 500px; /* top, right, bottom, left */
         font-size: 30px;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      #scene-button:hover{
+        transform: translateX(100px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3)
+      }
+      #scene-button:active{
+        transform: translateY(0)
+      }
+      .sprint{
         background: #ffd43b;
-        color: white;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        white-space: nowrap;
       }
-      .sprint:hover {
-        transform: translateX(100px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-      }
-      .sprint:active {
-        transform: translateY(0);
-      }
-
-      .blitz {
-        text-align: left;
-        font-family: "Courier New", Courier, monospace;
-        clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        display: block;
-        margin: 10px 5%;
-        transform: translateX(250px);
-        padding: 30px 100% 30px 500px; /* top, right, bottom, left */
-        font-size: 30px;
+      .blitz{
         background: #ff6b6b;
-        color: white;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        white-space: nowrap;
       }
-      .blitz:hover {
-        transform: translateX(100px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-      }
-      .blitz:active {
-        transform: translateY(0);
-      }
-
-      .practice {
-        text-align: left;
-        font-family: "Courier New", Courier, monospace;
-        clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        display: block;
-        margin: 10px 5%;
-        transform: translateX(250px);
-        padding: 30px 100% 30px 500px; /* top, right, bottom, left */
-        font-size: 30px;
+      .practice{
         background: #ba55d3;
-        color: white;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        white-space: nowrap;
       }
-      .practice:hover {
-        transform: translateX(100px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-      }
-      .practice:active {
-        transform: translateY(0);
+      .freefall{
+        background: #4B158C;
       }
       
     </style>
@@ -128,9 +88,10 @@
     <div class = "box"></div>
     <h1 class = "mode">Select a mode:</h1>
     <a href = "home.html"><button class = "back">Back</button></a>
-    <button class="sprint" onclick="window.location.href='sprint.html'">40 Equation Sprint</button>
-    <button class="blitz" onclick="window.location.href='blitz.html'">Blitz</button>
-    <button class="practice" onclick="window.location.href='practice.html'">Practice Mode</button>
+    <button class="sprint" id = "scene-button" onclick="window.location.href='sprint.html'">40 Equation Sprint</button>
+    <button class="blitz" id = "scene-button" onclick="window.location.href='blitz.html'">Blitz</button>
+    <button class="practice" id = "scene-button" onclick="window.location.href='practice.html'">Practice Mode</button>
+    <button class="freefall" id = "scene-button" onclick="window.location.href='freefall.html'">Freefall</button>
     <script>
       window.addEventListener('load', () => {
         const savedBg = localStorage.getItem('customBackground');
