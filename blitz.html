@@ -116,22 +116,21 @@
     <a href = "modes.html"><button class = "back">Modes</button></a>
     <script>
       const API = "https://family-complete-walked-borders.trycloudflare.com";
-      
+
       function submitFinalScore(finalScore) {
         const username = localStorage.getItem("username");
-      
+
         if (!username) {
           console.error("No username found in localStorage");
           return;
         }
-      
+
         fetch(API + "/score-blitz", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: username,
-            score: finalScore,
-            passwordHash: localStorage.passwordHash
+            score: finalScore
           })
         })
         .then(res => res.json())
@@ -160,6 +159,7 @@
       let totalReadingTime = 0;
       let totalTypingTime = 0;
       let score = 0;
+      let recordType = false;
 
       //getting keybinds
       let answerQuestion = localStorage.getItem("answer_question");
@@ -228,8 +228,6 @@
           //end run if greater than 1:59:999999999... seconds
           if(elapsed >= 120){
             clearInterval(timerInterval);
-
-
             //achievements
             if(bestScore >= 100){unlockAchievement("blitz_master");}
             unlockAchievement("first_win");
@@ -241,8 +239,35 @@
 
             //high score stuff
             const finalScore = score;
-
+            fetch(API + "/leaderboard-blitz")
+            .then(res => {
+              if (!res.ok) throw new Error('Network response was not ok');
+              return res.json();
+            })
+            .then(data => {
+              if(data[0].name === localStorage.getItem("username")&&data[0].score===finalScore){
+                record("WORLD RECORD");
+                recordType = true;
+              }else if(!recordType){
+                for(let i = 0; i < data.length; i++){
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalScore&&i<4){
+                    record("TOP 3");
+                    recordType = true;
+                  }
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalScore&&i<11){
+                    record("TOP 10");
+                    recordType = true;
+                  }
+                }
+              }
+            })
+            .catch(err => {
+              console.error("Blitz leaderboard fetch failed:", err);
+              document.getElementById("leaderboard-blitz").innerHTML = 
+                '<p style="color: red; text-shadow: 2px 2px 4px black;">Failed to load leaderboard. Please try again later.</p>';
+            });
             if (bestScore === null || finalScore > bestScore) {
+              if(!recordType){record("PERSONAL BEST");}
               bestScore = finalScore;
               localStorage.setItem("bestScore", bestScore.toString());
               updateHighscoreDisplay();
@@ -257,14 +282,14 @@
             localStorage.setItem("totalGames", gamesPlayed.toString());
 
             //achievements
-            
+
             equationElement.innerHTML = `Time's Up!<br>Final Score: ${finalScore}<br>Avg Reading: ${avgReadingTime}s <br> Avg Typing: ${avgTypingTime}s`;
             answerBox.disabled = true;
             counterElement.textContent = `Final Score: ${score}`;
-            
+
             // Submit score to server
             submitFinalScore(finalScore);
-            
+
             return;
           }
         }, 50);
@@ -280,6 +305,18 @@
           unlockedAchievements.push(achievementId);
           localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
         }
+      }
+      function record(text){
+        const record = document.createElement("p");
+        record.className = "record";
+        record.textContent = text;
+        document.body.appendChild(record);
+
+        const secondRecord = document.createElement("p");
+        secondRecord.className = "second-record";
+        secondRecord.textContent = text;
+        document.body.appendChild(secondRecord);
+        console.log(secondRecord);
       }
 
       updateEquation();
