@@ -130,7 +130,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: username,
-            score: finalScore
+            score: finalScore,
+            passwordHash: localStorage.passwordHash
           })
         })
         .then(res => res.json())
