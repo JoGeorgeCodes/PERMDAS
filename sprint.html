@@ -155,7 +155,9 @@
     <a href = "modes.html"><button class = "back">Modes</button></a>
 
     <script>
-
+      if(localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ||
+         !localStorage.passwordHash) 
+        alert("You cannot submit scores to the leaderboard without a password")
 
 
       const API = "https://family-complete-walked-borders.trycloudflare.com";
@@ -173,7 +175,8 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: username,
-            score: finalTime
+            score: finalTime,
+            passwordHash: localStorage.passwordHash
           })
         })
         .then(res => res.json())
