@@ -152,6 +152,7 @@
     <p class = "reading-time" id = "reading-time">Avg Read: 0.00s</p>
     <p class = "typing-time" id = "typing-time">Avg Type: 0.00s</p>
     <script>
+      const API = "https://family-complete-walked-borders.trycloudflare.com";
       const answerBox = document.getElementById("answer-box");
       const equationElement = document.getElementById("equation");
       const timerElement = document.getElementById("timer");
@@ -301,10 +302,6 @@
         }
       }
 
-/freefall
-
-Selection deleted
-
       function findAnswer(){
         switch(currentBag[equationNum]){
             case "+":
@@ -336,6 +333,29 @@ Selection deleted
         updateAPS();
       }
 
+      function submitFinalScore(finalScore) {
+        const username = localStorage.getItem("username");
+      
+        if (!username) {
+          console.error("No username found in localStorage");
+          return;
+        }
+      
+        fetch(API + "/score-freefall", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: username,
+            score: finalScore
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Score submitted:", data.user);
+        })
+        .catch(err => console.error("Score submit failed:", err));
+      }
+
       generateBag();
       equationElement.innerHTML = displayEquation();
       console.log(highScore);
@@ -352,24 +372,26 @@ Selection deleted
             localStorage.setItem("freefallHighScore", equationsCompleted);
             bestScoreElement.innerHTML = `Best Score: ${equationsCompleted}`;
             
+            submitFinalScore(equationsCompleted);
+            
             fetch(API + "/leaderboard-freefall")
             .then(res => {
               if (!res.ok) throw new Error('Network response was not ok');
               return res.json();
             })
             .then(data => {
-              if(data[0].name === localStorage.getItem("username")&&data[0].score===finalTime){
+              if(data[0].name === localStorage.getItem("username")&&data[0].score===equationsCompleted){
                 record("WORLD RECORD");
                 recordType = true;
 
               }
               if(!recordType){
                 for(let i = 0; i < data.length; i++){
-                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<4){
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===equationsCompleted&&i<4){
                     record("TOP 3");
                     recordType = true;
                   }
-                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<11){
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===equationsCompleted&&i<11){
                     record("TOP 10");
                     recordType = true;
                   }
@@ -378,12 +400,12 @@ Selection deleted
               console.log(data);
             })
             .catch(err => {
-              console.error("Sprint leaderboard fetch failed:", err);
+              console.error("Freefall leaderboard fetch failed:", err);
               return;
             });
           }
         }
-      })
+      }, 10)
       
       document.addEventListener("keydown",(event)=>{
         if(event.key===resetKey){
