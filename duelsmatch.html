@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PERMDAS League FT 5</title>
+    <style>
+      .header{
+        text-align: center;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        font-size: 40px
+      }
+      .box{
+        position: fixed;
+        top: 0;
+        left: 10%;
+        width: 80%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: -1
+      }
+      .answer_box{
+        display: block;
+        width: 40%;
+        margin: 50px auto;
+        height: 100px;
+        font-size: 20px;
+        text-align: center;
+        border: 3px solid white;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .equation{
+        color: white;
+        font-size: 60px;
+        margin-top: 100px;
+        text-align: center;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .aps{
+        font-size: 20px;
+        position: absolute;
+        top: 42%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10;
+      }
+      .reading-time{
+        font-size: 20px;
+        position: absolute;
+        top: 47%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10;
+      }
+      .typing-time{
+        font-size: 20px;
+        position: absolute;
+        top: 52%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10;
+      }
+      .attack-bar{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 20%;
+        left: 15%;
+        width: 3%;
+        height: 0px;
+        max-height: 500px;
+        background-color: yellow;
+        border-radius: 10px;
+        transition: height 0.3s ease;
+      }
+      .health-bar{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 20%;
+        left: 20%;
+        width: 3%;
+        max-height: 500px;
+        height: 500px;
+        background-color: red;
+        border-radius: 10px;
+        transition: height 0.3s ease;
+      }
+      body{
+        background-image: url("https://media.posterstore.com/site_images/685ddd908b7ca77dcb8af940_1207156463_PS50626-4.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class = "box"></div>
+    <h1 class = "header">PERMDAS LEAGUE FT 5</h1>
+    <p class = "equation" id = "equation">Loading...</p>
+    <p class = "reading-time" id = "reading-time">Avg Read: 0.00s</p>
+    <p class = "typing-time" id = "typing-time">Avg Type: 0.00s</p>
+    <p class = "aps" id = "aps">APS: __.__</p>
+    <textarea class = "answer_box" id = "answer_box"></textarea>
+    <div class = "attack-bar" id = "attack-bar"></div>
+    <div class = "health-bar" id = "health-bar"></div>
+    <script>
+      let equation = [];
+      let currentBag = [];
+      let currentEquationsInBag = [];
+      let operations = ["+", "-", "*", "/"];
+      let currentOperator = operations[Math.floor(Math.random() * 4)];
+      let equationNum = 0;
+      let attacksQued = [];
+      let combo = 0;
+      let comboMultiplier = 1;
+      let health = 100;
+      let paused = false;
+      let attackDelay = 5000; // 5 seconds in milliseconds
+      
+      // Stats tracking variables
+      let equationsCompleted = 0;
+      let startTime = Date.now();
+      let timerInterval;
+      let timerStarted = false;
+      let problemPhase = "not started";
+      let phaseStartTime = Date.now();
+      let totalReadingTime = 0;
+      let totalTypingTime = 0;
+
+      const equationElement = document.getElementById("equation");
+      const answerBox = document.getElementById("answer_box");
+      const apsElement = document.getElementById("aps");
+      const readingTimeElement = document.getElementById("reading-time");
+      const typingTimeElement = document.getElementById("typing-time");
+      const attackBarElement = document.getElementById("attack-bar");
+      const healthBarElement = document.getElementById("health-bar");
+
+      //some controls from localStorage
+      let answerQuestion = localStorage.getItem("answer_question");
+      let resetGame = localStorage.getItem("reset_game");
+      
+      // Stats functions
+      function updateAPS() {
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (elapsed > 0) {
+          const aps = equationsCompleted / elapsed;
+          apsElement.textContent = `APS: ${aps.toFixed(2)}`;
+        }
+
+        // Update average reading and typing times
+        if (equationsCompleted > 0) {
+          const avgReading = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
+          const avgTyping = (totalTypingTime / equationsCompleted / 1000).toFixed(2);
+          readingTimeElement.textContent = `Avg Read: ${avgReading}s`;
+          typingTimeElement.textContent = `Avg Type: ${avgTyping}s`;
+        }
+      }
+      
+      function switchPhase(newPhase) {
+        // Record time spent in current phase
+        const phaseElapsed = Date.now() - phaseStartTime;
+
+        if (problemPhase === "reading") {
+          totalReadingTime += phaseElapsed;
+        } else if (problemPhase === "typing") {
+          totalTypingTime += phaseElapsed;
+        }
+
+        // Switch to new phase
+        problemPhase = newPhase;
+        phaseStartTime = Date.now();
+      }
+      
+      function startTimer() {
+        if (timerStarted) return;
+        timerStarted = true;
+        startTime = Date.now();
+        phaseStartTime = startTime;
+        switchPhase("reading");
+        timerInterval = setInterval(() => {
+          const elapsed = (Date.now() - startTime) / 1000;
+          updateAPS();
+        }, 50); // updates 20 times per second
+      }
+      
+      function generateBag(){
+        currentBag = [];
+        currentEquationsInBag = [];
+        for(let i = 0; i < 8; i++){
+          //generating the operators
+          currentOperator = operations[Math.floor(Math.random() * 4)];
+          currentBag.push(currentOperator);
+          //generating the numbers
+          if(currentOperator!== "/"&&currentOperator!== "*"){
+            currentEquationsInBag.push([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
+          }else{
+            let num1 = Math.floor(Math.random() * 12);
+            let num2 = Math.floor(Math.random() * 12);
+            if(currentOperator==="/"){
+              if(num1 === 0){num1 = 1;}
+              if(num2 === 0){num2 = 1;}
+            }
+            currentEquationsInBag.push([num1, num2]);
+          }
+        }
+      }
+      
+      function displayOperater(){
+        switch(currentBag[equationNum]){
+          case "+":
+            return "+";
+          break;
+          case "-":
+            return "-";
+          break;
+          case "*":
+            return "×";
+          break;
+          case "/":
+            return "÷";
+          break;
+          
+        }
+      }
+      
+      function displayEquation(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+        }
+      }
+      
+      function findAttack(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return 1*comboMultiplier;
+            break;
+            case "-":
+              return 2*comboMultiplier;
+            break;
+            case "*":
+              return 4*comboMultiplier;
+            break;
+            case "/":
+              return 4*comboMultiplier;;
+        }
+      }
+      
+      function findAnswer(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] + currentEquationsInBag[equationNum][1];
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] - currentEquationsInBag[equationNum][1];
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] * currentEquationsInBag[equationNum][1];
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0];
+            break;
+        }
+      }
+
+      // FIXED: Proper attack tick system
+      function attackTick(){
+        const currentTime = Date.now();
+        
+        for(let i = attacksQued.length - 1; i >= 0; i--){
+          let attack = attacksQued[i];
+          let timeSinceQueued = currentTime - attack[1]; // attack[1] is timestamp
+          
+          // If attack has been queued for 5+ seconds, apply damage
+          if(timeSinceQueued >= attackDelay){
+            health -= attack[0]; // attack[0] is damage
+            attacksQued.splice(i, 1); // Remove this attack
+            updateHealthBar();
+            console.log("Attack hit! Health:", health, "Remaining attacks:", attacksQued.length);
+            
+            // Check for game over
+            if(health <= 0){
+              health = 0;
+              updateHealthBar();
+              endGame();
+            }
+          }
+        }
+      }
+      
+      function updateAttackBar() {
+        // Calculate total queued attack damage
+        let totalAttack = 0;
+        for(let attack of attacksQued) {
+          totalAttack += attack[0]; // attack[0] is the damage value
+        }
+        
+        // Update bar height (max 500px)
+        const barHeight = Math.min(totalAttack * 50, 500); // Scale as needed
+        attackBarElement.style.height = barHeight + 'px';
+      }
+      
+      function updateHealthBar() {
+        // Update health bar height based on current health (0-100)
+        const healthPercentage = Math.max(0, health) / 100;
+        const barHeight = healthPercentage * 500;
+        healthBarElement.style.height = barHeight + 'px';
+      }
+      
+      function endGame() {
+        clearInterval(timerInterval);
+        clearInterval(attackInterval);
+        paused = true;
+        answerBox.disabled = true;
+        equationElement.innerHTML = "Game Over!<br>You Lost!";
+      }
+      
+      //stuff for agni to do
+      function sendAttack(damage){
+        //send this to enemy
+        attacksQued.push([damage, Date.now()]); // [damage, timestamp]
+        updateAttackBar();
+        console.log("Attack queued:", damage, "Total attacks:", attacksQued.length);
+      }
+      
+      generateBag();
+      
+      // Start attack tick interval
+      const attackInterval = setInterval(attackTick, 100); // Check every 100ms
+      
+       //loop
+      setInterval(() =>{
+        if(paused)return;
+        equationElement.textContent = displayEquation();
+      }, 100)
+      
+      //solving equation
+      answerBox.addEventListener("keyup", (event) =>{
+        if(paused) return;
+        
+        // Switch to typing phase when user starts typing
+        if (problemPhase === "reading") {
+          switchPhase("typing");
+        }
+
+        if (!timerStarted){
+          startTimer();
+        }
+        
+        if(event.key === answerQuestion){
+          if(Number(answerBox.value) === findAnswer()){
+            equationNum++;
+            combo++;
+            equationsCompleted++;
+            switchPhase("reading");
+            
+            // FIXED: Proper attack logic
+            let attackValue = findAttack();
+            
+            if(attacksQued.length > 0){
+              // Reduce first attack in queue by damage dealt
+              attacksQued[0][0] -= attackValue;
+              if(attacksQued[0][0] <= 0){
+                attacksQued.shift(); // Remove depleted attack
+              }
+              updateAttackBar();
+            } else {
+              // No attacks to defend against, send attack to enemy
+              sendAttack(attackValue);
+            }
+            
+            answerBox.value = "";
+            displayEquation();
+            if(equationNum>7){
+              equationNum = 0;
+              generateBag();
+            }
+          }else{
+            answerBox.value = "";
+            paused = true;
+            equationElement.innerHTML = "Wrong answer<br>2 second penalty";
+            answerBox.disabled = true;
+            combo = 0;
+            setTimeout(() =>{
+              paused = false;
+              answerBox.disabled = false;
+              displayEquation();
+              answerBox.focus();
+              switchPhase("reading");
+            }, 2000);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
