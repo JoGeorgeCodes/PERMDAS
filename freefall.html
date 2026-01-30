@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .back{
+        backdrop-filter: blur(10px);
+        padding: 15px 50px 15px 80px;
+        clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 0% 100%);
+        position: absolute;
+        color: red;
+        background-color:rgba(0, 0, 0, 0.3);
+        top: 0px;
+        left: -50px;
+        font-size: 30px;
+        border: none;
+        cursor: pointer;
+        font-family: "Courier New", Courier, monospace;
+        transition: all 0.3s ease;
+      }
+      .back:hover{
+        transform: translateX(50px)
+      }
+      .answer-box{
+        display: block;
+        width: 400px;
+        height: 100px;
+        margin: 50px auto 0;
+        font-size: 20px;
+        text-align: center;
+        border-radius: 10px;
+      }
+      .header{
+        text-align: center;
+        font-size: 50px;
+        font-family: "Courier New", Courier, monospace;
+        color: aquamarine;
+      }
+      .box{
+        position: fixed;
+        top: 0;
+        left: 10%;
+        width: 80%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(2px);
+        z-index: -1
+      }
+      .equation{
+        color: white;
+        margin-top: 100px;
+        text-align: center;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 35px;
+      }
+      .aps{
+        font-size: 20px;
+        position: absolute;
+        top: 42%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10
+      }
+      .reading-time{
+        font-size: 20px;
+        position: absolute;
+        top: 47%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10;
+      }
+      .typing-time{
+        font-size: 20px;
+        position: absolute;
+        top: 52%;
+        right: 15%;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+        z-index: 10;
+      }
+      .timer{
+        font-size: 20px;
+        text-align: center;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 2px 2px 4px black;
+      }
+      .highscore{
+        position: absolute;
+        font-family: "Courier New", Courier, monospace;
+        top: 60px;
+        right: 16%;
+        font-size: 25px;
+      }
+      .record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: record 5s forwards;
+        pointer-events: none;
+      }
+      .second-record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: secondRecord 5s forwards;
+        pointer-events: none
+      }
+      @keyframes record{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:1;}
+        50% {transform: translate(-50%, -40%) scale(5); opacity:0.5;}
+        100% {transform: translate(-50%, -40%) scale(10); opacity:0;}
+      }
+      @keyframes secondRecord{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:0.5;}
+        50% {transform: translate(-50%, -40%) scale(7.5); opacity:0.25;}
+        100% {transform: translate(-50%, -40%) scale(15); opacity:0;}
+      }
+      body{
+        background-image: url("https://images.pexels.com/photos/2086917/pexels-photo-2086917.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class = "box"></div>
+    <a href = modes.html><button class = "back">Back</button></a>
+    <p class = "highscore" id = "best-score">Best Score: __.__</p>
+    <h1 class = "header">Freefall</h1>
+    <p class = "equation" id = "equation">Loading...</p>
+    <p class = "timer" id = "timer">Time left: 20.00s</p>
+    <textarea class = "answer-box" id = "answer-box"></textarea>
+    <p class = "aps" id = "aps">APS: __.__</p>
+    <p class = "reading-time" id = "reading-time">Avg Read: 0.00s</p>
+    <p class = "typing-time" id = "typing-time">Avg Type: 0.00s</p>
+    <script>
+      const answerBox = document.getElementById("answer-box");
+      const equationElement = document.getElementById("equation");
+      const timerElement = document.getElementById("timer");
+      const enterKey = localStorage.getItem("answer_question");
+      const resetKey = localStorage.getItem("reset_game");
+      const readingTimeElement = document.getElementById("reading-time");
+      const typingTimeElement = document.getElementById("typing-time");
+      const bestScoreElement = document.getElementById("best-score");
+      const highScore = localStorage.getItem("freefallHighScore");
+
+      if(highScore!==null){
+        bestScoreElement.innerHTML = `Best Score: ${highScore}`;
+      }
+
+      let timeLeft = 2000;
+      let maxTime = 2000;
+      let timeMultiplier = 0.95;
+      let currentBag = [];
+      let currentEquationsInBag = [];
+      let operations = ["+", "-", "*", "/"];
+      let currentOperator = operations[Math.floor(Math.random() * 4)];
+      let equationNum = 0;
+      let paused = false;
+      let equationsCompleted = 0;
+      let startTime = Date.now();
+      let timerInterval;
+      let timerStarted = false;
+      let problemPhase = "not started";
+      let phaseStartTime = Date.now();
+      let totalReadingTime = 0;
+      let totalTypingTime = 0;
+      let recordType = false;
+      const apsElement = document.getElementById("aps");
+      
+      function updateAPS() {
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (elapsed > 0) {
+          const aps = equationsCompleted / elapsed;
+          apsElement.textContent = `APS: ${aps.toFixed(2)}`;
+        }
+
+        // Update average reading and typing times
+        if (equationsCompleted > 0) {
+          const avgReading = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
+          const avgTyping = (totalTypingTime / equationsCompleted / 1000).toFixed(2);
+          readingTimeElement.textContent = `Avg Read: ${avgReading}s`;
+          typingTimeElement.textContent = `Avg Type: ${avgTyping}s`;
+        }
+      }
+
+      function record(text){
+        if(!recordType){
+          recordType = true;
+          const record = document.createElement("p");
+          record.className = "record";
+          record.textContent = text;
+          document.body.appendChild(record);
+  
+          const secondRecord = document.createElement("p");
+          secondRecord.className = "second-record";
+          secondRecord.textContent = text;
+          document.body.appendChild(secondRecord);
+          console.log(secondRecord);
+        }
+      }
+      
+      function switchPhase(newPhase) {
+        // Record time spent in current phase
+        const phaseElapsed = Date.now() - phaseStartTime;
+
+        if (problemPhase === "reading") {
+          totalReadingTime += phaseElapsed;
+        } else if (problemPhase === "typing") {
+          totalTypingTime += phaseElapsed;
+        }
+
+        // Switch to new phase
+        problemPhase = newPhase;
+        phaseStartTime = Date.now();
+      }
+
+      function startTimer() {
+        if (timerStarted) return;
+        timerStarted = true;
+        startTime = Date.now();
+        phaseStartTime = startTime;
+        switchPhase("reading");
+        timerInterval = setInterval(() => {
+          const elapsed = (Date.now() - startTime) / 1000;
+          updateAPS();
+        }, 50); // updates 20 times per second
+      }
+
+      function generateBag(){
+        currentBag = [];
+        currentEquationsInBag = [];
+        for(let i = 0; i < 8; i++){
+          //generating the operators
+          currentOperator = operations[Math.floor(Math.random() * 4)];
+          currentBag.push(currentOperator);
+          //generating the numbers
+          if(currentOperator!== "/"&&currentOperator!== "*"){
+            currentEquationsInBag.push([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
+          }else{
+            let num1 = Math.floor(Math.random() * 12);
+            let num2 = Math.floor(Math.random() * 12);
+            if(currentOperator==="/"){
+              if(num1 === 0){num1 = 1;}
+              if(num2 === 0){num2 = 1;}
+            }
+            currentEquationsInBag.push([num1, num2]);
+          }
+        }
+      }
+
+      function displayOperater(){
+        switch(currentBag[equationNum]){
+          case "+":
+            return "+";
+          break;
+          case "-":
+            return "-";
+          break;
+          case "*":
+            return "×";
+          break;
+          case "/":
+            return "÷";
+          break;
+
+        }
+      }
+
+      function displayEquation(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+        }
+      }
+
+/freefall
+
+Selection deleted
+
+      function findAnswer(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] + currentEquationsInBag[equationNum][1];
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] - currentEquationsInBag[equationNum][1];
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] * currentEquationsInBag[equationNum][1];
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0];
+            break;
+        }
+      }
+
+      function findNewTime(){
+        maxTime = maxTime*timeMultiplier;
+        timeLeft = maxTime;
+      }
+
+      function tickTime(){
+        if(timerStarted){timeLeft--;}
+      }
+
+      function displayTime(){
+        timerElement.innerHTML = `Time left: ${(timeLeft/100).toFixed(2)}s`;
+        updateAPS();
+      }
+
+      generateBag();
+      equationElement.innerHTML = displayEquation();
+      console.log(highScore);
+      setInterval(() =>{
+        if(paused)return;
+        displayTime();
+        tickTime();
+        if(timeLeft<=0){
+          equationElement.innerHTML = `You failed to solve the equation in ${(maxTime/100).toFixed(2)} seconds<br>Equations Solved: ${equationsCompleted}`;
+          timerElement.innerHTML = "Time left: 0.00s";
+          paused = true;
+          answerBox.disabled = true;
+          if(equationsCompleted>highScore||highScore===null){
+            localStorage.setItem("freefallHighScore", equationsCompleted);
+            bestScoreElement.innerHTML = `Best Score: ${equationsCompleted}`;
+            
+            fetch(API + "/leaderboard-freefall")
+            .then(res => {
+              if (!res.ok) throw new Error('Network response was not ok');
+              return res.json();
+            })
+            .then(data => {
+              if(data[0].name === localStorage.getItem("username")&&data[0].score===finalTime){
+                record("WORLD RECORD");
+                recordType = true;
+
+              }
+              if(!recordType){
+                for(let i = 0; i < data.length; i++){
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<4){
+                    record("TOP 3");
+                    recordType = true;
+                  }
+                  if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<11){
+                    record("TOP 10");
+                    recordType = true;
+                  }
+                }
+              }
+              console.log(data);
+            })
+            .catch(err => {
+              console.error("Sprint leaderboard fetch failed:", err);
+              return;
+            });
+          }
+        }
+      })
+      
+      document.addEventListener("keydown",(event)=>{
+        if(event.key===resetKey){
+          location.reload();
+        }
+      });
+      
+      answerBox.addEventListener("keyup", (event) =>{
+        if (problemPhase === "reading"){switchPhase("typing");}
+        if(paused)return;
+        if (!timerStarted){timerStarted = true;}
+        if(event.key===enterKey){
+          if(Number(answerBox.value)===findAnswer()){
+            equationNum++;
+            if(equationNum>7){
+              equationNum = 0;
+              generateBag();
+            }
+            answerBox.value = "";
+            equationsCompleted++;
+            equationElement.textContent = displayEquation();
+            switchPhase("reading");
+            findNewTime();
+          }else{
+            answerBox.value = "";
+            paused = true;
+            equationElement.innerHTML = "Wrong answer<br>1 second penalty";
+            answerBox.disabled = true;
+            setTimeout(() =>{
+              paused = false;
+              answerBox.disabled = false;
+              equationElement.textContent = displayEquation();
+              answerBox.focus();
+            }, 1000);
+          }
+        }
+      });
+      
+    </script>
+  </body>
+</html>
