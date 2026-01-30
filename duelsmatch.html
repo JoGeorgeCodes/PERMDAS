@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PERMDAS League FT 5</title>
+    <title>PERMDAS League FT 1</title>
     <style>
       .header{
         text-align: center;
@@ -127,7 +127,7 @@
       let attacksQued = [];
       let combo = 0;
       let comboMultiplier = 1;
-      let health = 100;
+      let health = 40;
       let paused = false;
       let attackDelay = 5000; // 5 seconds in milliseconds
       
@@ -252,20 +252,55 @@
               return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
         }
       }
+
+      function findComboMultiplier(){
+        comboMultiplier = combo/30+1;
+      }
       
       function findAttack(){
-        switch(currentBag[equationNum]){
-            case "+":
-              return 1*comboMultiplier;
-            break;
-            case "-":
-              return 2*comboMultiplier;
-            break;
-            case "*":
-              return 4*comboMultiplier;
-            break;
-            case "/":
-              return 4*comboMultiplier;;
+        findComboMultiplier();
+        if(equationNum<8){
+          switch(currentBag[equationNum]){
+              case "+":
+                return 1*comboMultiplier;
+              break;
+              case "-":
+                return 2*comboMultiplier;
+              break;
+              case "*":
+                return 4*comboMultiplier;
+              break;
+              case "/":
+                return 4*comboMultiplier;
+              break;
+              default:
+                console.log("error");
+                console.log(currentBag[equationNum]);
+                console.log(currentEquationsInBag[equationNum]);
+                console.log(equationNum);
+                return 0;
+          }
+        }else{
+          switch(currentBag[equationNum-1]){
+              case "+":
+                return 1*comboMultiplier;
+              break;
+              case "-":
+                return 2*comboMultiplier;
+              break;
+              case "*":
+                return 4*comboMultiplier;
+              break;
+              case "/":
+                return 4*comboMultiplier;
+              break;
+              default:
+                console.log("error");
+                console.log(currentBag[equationNum]);
+                console.log(currentEquationsInBag[equationNum]);
+                console.log(equationNum);
+                return 0;
+          }
         }
       }
       
@@ -298,6 +333,7 @@
           if(timeSinceQueued >= attackDelay){
             health -= attack[0]; // attack[0] is damage
             attacksQued.splice(i, 1); // Remove this attack
+            updateAttackBar();
             updateHealthBar();
             console.log("Attack hit! Health:", health, "Remaining attacks:", attacksQued.length);
             
@@ -325,7 +361,7 @@
       
       function updateHealthBar() {
         // Update health bar height based on current health (0-100)
-        const healthPercentage = Math.max(0, health) / 100;
+        const healthPercentage = Math.max(0, health) / 40;
         const barHeight = healthPercentage * 500;
         healthBarElement.style.height = barHeight + 'px';
       }
@@ -335,7 +371,7 @@
         clearInterval(attackInterval);
         paused = true;
         answerBox.disabled = true;
-        equationElement.innerHTML = "Game Over!<br>You Lost!";
+        equationElement.innerHTML = "DEFEAT";
       }
       
       //stuff for agni to do
@@ -376,6 +412,11 @@
             combo++;
             equationsCompleted++;
             switchPhase("reading");
+
+            if(equationNum>7){
+              equationNum = 0;
+              generateBag();
+            }
             
             // FIXED: Proper attack logic
             let attackValue = findAttack();
@@ -384,7 +425,7 @@
               // Reduce first attack in queue by damage dealt
               attacksQued[0][0] -= attackValue;
               if(attacksQued[0][0] <= 0){
-                attacksQued.shift(); // Remove depleted attack
+                attacksQued.shift();
               }
               updateAttackBar();
             } else {
@@ -394,10 +435,6 @@
             
             answerBox.value = "";
             displayEquation();
-            if(equationNum>7){
-              equationNum = 0;
-              generateBag();
-            }
           }else{
             answerBox.value = "";
             paused = true;
