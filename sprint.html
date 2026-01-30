@@ -183,7 +183,10 @@
         .then(data => {
           console.log("Score submitted:", data.user);
         })
-        .catch(err => console.error("Score submit failed:", err));
+        .catch(err => {
+          console.error("Score submit failed:", err);
+          alert("Score Submit failed: "+err)
+        });
       }
 
       //high scores:
