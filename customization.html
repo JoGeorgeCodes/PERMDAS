@@ -306,14 +306,14 @@
         return hashHex;
       }
 
-      function setPassword(){ //no ai
+      async function setPassword(){ //no ai
         var oldPasswordInput = document.getElementById("old-password").value
         var newPasswordInput = document.getElementById("new-password").value
         var confirmPasswordInput = document.getElementById("confirm-new-password").value
         //on the low chance the user actually types his password 2 times in a row:
         if(newPasswordInput == confirmPasswordInput){
-          var oldPasswordHash = secureHash(oldPasswordInput);
-          var newPasswordHash = secureHash(newPasswordInput);
+          var oldPasswordHash = await secureHash(oldPasswordInput);
+          var newPasswordHash = await secureHash(newPasswordInput);
           fetch(API + "/setPassword", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
