@@ -364,6 +364,7 @@
         tickTime();
         if(paused)return;
         if(timeLeft<=0){
+          timerStarted = false;
           equationElement.innerHTML = `You failed to solve the equation in ${(maxTime/100).toFixed(2)} seconds<br>Equations Solved: ${equationsCompleted}`;
           timerElement.innerHTML = "Time left: 0.00s";
           paused = true;
