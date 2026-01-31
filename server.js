@@ -148,7 +148,7 @@ app.get("/leaderboard-freefall", (req, res) => {
   console.log("DEBUG: GET /leaderboard-freefall called (freefall mode)");
   let bestScores = [];
   for (let name in users) {
-    // Ensure blitzScores exists
+    // Ensure freefall exists
     if (!users[name].freeFallScores) {
       users[name].freeFallScores = [];
     }
