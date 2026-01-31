@@ -129,6 +129,13 @@
       <h2 class="gamemode-title">Blitz</h2>
       <div id="leaderboard-blitz" class="list">Loading...</div>
     </div>
+
+    <!-- Freefall Leaderboard -->
+    <div class="container">
+      <h2 class="gamemode-title">Blitz</h2>
+      <div id="leaderboard-freefall" class="list">Loading...</div>
+    </div>
+    
     <!--<button class="force-update" id="forcePush">Force Update</button>-->
     
     <script>
@@ -340,6 +347,21 @@
           document.getElementById("leaderboard-blitz").innerHTML = 
             '<p style="color: red; text-shadow: 2px 2px 4px black;">Failed to load leaderboard. Please try again later.</p>';
         });
+
+      //freefall !!!
+      fetch(API + "/leaderboard-freefall")
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(data => {
+        displayLeaderboard(data, "leaderboard-freefall", "points");
+      })
+      .catch(err => {
+        console.error("freefall leaderboard fetch failed:", err);
+        document.getElementById("leaderboard-freefall").innerHTML = 
+          '<p style="color: red; text-shadow: 2px 2px 4px black;">Failed to load leaderboard. Please try again later.</p>';
+      });
       
       // Load custom background
       window.addEventListener('load', () => {
