@@ -143,7 +143,7 @@ app.get("/leaderboard", (req, res) => {
 	res.json(topScores);
 });
 
-// --- Get top 10 Blitz scores (leaderboard) ---
+// --- Get top 10 Freefall scores (leaderboard) ---
 app.get("/leaderboard-freefall", (req, res) => {
   console.log("DEBUG: GET /leaderboard-freefall called (freefall mode)");
   let bestScores = [];
