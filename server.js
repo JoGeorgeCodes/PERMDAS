@@ -143,6 +143,27 @@ app.get("/leaderboard", (req, res) => {
 	res.json(topScores);
 });
 
+// --- Get top 10 Blitz scores (leaderboard) ---
+app.get("/leaderboard-freefall", (req, res) => {
+  console.log("DEBUG: GET /leaderboard-freefall called (freefall mode)");
+  let bestScores = [];
+  for (let name in users) {
+    // Ensure blitzScores exists
+    if (!users[name].freeFallScores) {
+      users[name].freeFallScores = [];
+    }
+
+    let userScores = users[name].freeFallScores;
+    if (userScores.length === 0) continue;
+    let bestScore = Math.max(...userScores); // best score = highest score
+    bestScores.push({ name, score: bestScore });
+  }
+  bestScores.sort((a, b) => b.score - a.score); // Sort descending (highest first)
+  const topScores = bestScores.slice(0, 10);
+  console.log("DEBUG: Returning free fall leaderboard:", topScores);
+  res.json(topScores);
+});
+
 app.post("/login", (req, res) => {
 	console.log("Login attempt received");
 
