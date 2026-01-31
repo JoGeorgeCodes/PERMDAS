@@ -189,7 +189,7 @@
       
       function updateAPS() {
         const elapsed = (Date.now() - startTime) / 1000;
-        if (elapsed > 0) {
+        if (elapsed > 0&&timeLeft>0) {
           const aps = equationsCompleted / elapsed;
           apsElement.textContent = `APS: ${aps.toFixed(2)}`;
         }
@@ -242,7 +242,7 @@
         switchPhase("reading");
         timerInterval = setInterval(() => {
           const elapsed = (Date.now() - startTime) / 1000;
-          updateAPS();
+          if(timerStarted){updateAPS();}
         }, 50); // updates 20 times per second
       }
 
