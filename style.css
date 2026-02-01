@@ -1,0 +1,16 @@
+.goldmedal_animation{
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-25%, -25%);
+    background: transparent url('goldmedal.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+    animation: run_goldmedal 0.8s steps(11) infinite;
+
+}
+
+@keyframes run_goldmedal{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -11264px 0px;}
+}
