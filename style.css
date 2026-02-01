@@ -1,3 +1,4 @@
+/* gold medal animation */ 
 .goldmedal_animation{
     position: absolute;
     left: 15%;
@@ -14,6 +15,8 @@
     0%{background-position: 0px 0px;}
     100%{background-position: -11264px 0px;}
 }
+
+/* bronze medal animation */ 
 .bronzemedal_animation{
     position: absolute;
     left: 15%;
@@ -27,6 +30,24 @@
 }
 
 @keyframes run_bronzemedal{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -11264px 0px;}
+}
+
+/* silver medal animation */ 
+.silvermedal_animation{
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-25%, -25%);
+    background: transparent url('silvermedal.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+    animation: run_silvermedal 0.8s steps(11) infinite;
+
+}
+
+@keyframes run_silvermedal{
     0%{background-position: 0px 0px;}
     100%{background-position: -11264px 0px;}
 }
