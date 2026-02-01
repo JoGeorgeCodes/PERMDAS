@@ -2,6 +2,7 @@
 <html>
 
   <head>
+    <script src="config.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>40 equations SPRINT</title>
@@ -155,13 +156,10 @@
     <a href = "modes.html"><button class = "back">Modes</button></a>
 
     <script>
-      if(localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ||
-         !localStorage.passwordHash){
-        alert("You cannot submit scores to the leaderboard without a password")
+      if(localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"){
+        //alert("You cannot submit scores to the leaderboard without a password")
       }
 
-      const API = "https://family-complete-walked-borders.trycloudflare.com";
-      
       function submitFinalScore(finalTime) {
         const username = localStorage.getItem("username");
       
