@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="config.js"></script>
     <title>Leaderboard</title>
     <style>
       .header{
@@ -139,8 +140,6 @@
     <!--<button class="force-update" id="forcePush">Force Update</button>-->
     
     <script>
-      const API = "https://family-complete-walked-borders.trycloudflare.com";
-      
       //force push stuff
       const sprintBest = parseFloat(localStorage.getItem("bestTime"));
       const blitzBest = parseFloat(localStorage.getItem("bestScore"));
