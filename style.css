@@ -1,4 +1,5 @@
-/* gold medal animation */ 
+
+/* Gold Medal Animation */
 .goldmedal_animation{
     position: absolute;
     left: 15%;
@@ -11,12 +12,20 @@
 
 }
 
+/* Gold Medal Idle */
+.goldmedal_idle{
+    background: transparent url('goldmedal.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+}
+
 @keyframes run_goldmedal{
     0%{background-position: 0px 0px;}
     100%{background-position: -11264px 0px;}
 }
 
-/* bronze medal animation */ 
+/* Bronze Medal Animation */
+
 .bronzemedal_animation{
     position: absolute;
     left: 15%;
@@ -29,12 +38,21 @@
 
 }
 
+/* Bronze Medal Idle */
+.bronzemedal_idle{
+    background: transparent url('bronzemedal.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+
+}
+
 @keyframes run_bronzemedal{
     0%{background-position: 0px 0px;}
     100%{background-position: -11264px 0px;}
 }
 
-/* silver medal animation */ 
+/* Silver Medal Animation */
+
 .silvermedal_animation{
     position: absolute;
     left: 15%;
@@ -47,17 +65,26 @@
 
 }
 
+/* Silver Medal Idle */
+.silvermedal_idle{
+    background: transparent url('silvermedal.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+}
+
 @keyframes run_silvermedal{
     0%{background-position: 0px 0px;}
     100%{background-position: -11264px 0px;}
 }
 
+
+/* Speed Animation */
 .speed_animation{
     position: absolute;
     left: 15%;
     top: 15%;
     transform: translate(-25%, -25%);
-    background: transparent url('speed.png') 0 0 no-repeat;
+    background: transparent url('PERMDAS_speed.png') 0 0 no-repeat;
     width: 1024px;
     height: 1024px;
     animation: run_speed 1s steps(8) infinite;
@@ -68,3 +95,63 @@
     0%{background-position: 0px 0px;}
     100%{background-position: -8192px 0px;}
 }
+
+
+/* Practice Animation */
+.practice_animation{
+    position : absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    background: transparent url('PERMDAS_practice.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+    animation: run_practice 0.5s steps(9) infinite;
+
+}
+
+/* Practice Idle */
+.practice_idle{
+    position : absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    background: transparent url('PERMDAS_practice.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+}
+
+@keyframes run_practice{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -9216px 0px;}
+}
+
+/*Twitch animation*/
+.twitch_animation{
+    position : absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+    animation: run_twitch 1s steps(10) infinite;
+}
+
+/*Twitch idle*/
+
+.twitch_idle{
+    position: absolute;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
+    width: 1024px;
+    height: 1024px;
+}
+
+@keyframes run_twitch{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -10240px 0px;}
+}
+
