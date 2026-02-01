@@ -2,7 +2,6 @@
 <html>
 
   <head>
-    <script src="config.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>PERMDAS</title>
@@ -79,15 +78,16 @@
     <button class="customization" id = "scene-button" onclick="window.location.href='customization.html'">Customization</button>
     <button class="stats" id = "scene-button" onclick="window.location.href='stats.html'">Stats</button>
     <button class="credits" id = "scene-button" onclick="window.location.href='credits.html'">Credits</button>
-    <audio id = "source_of_audio" autoplay loop></audio>
-    <script src="https://cunfuzed.github.io/PERMDAS/updateserverstats.js"></script>
-
+    <audio id = "intro" autoplay></audio>
+    <audio id = "loop" autoplay loop></audio>
+    
     <script>
       //background music!
-      const backgroundMusic = document.getElementById("source_of_audio");
+      const backgroundIntroMusic = document.getElementById("intro");
+      const backgroundMusic = document.getElementById("loop");
       const musicEnabled = localStorage.getItem("musicEnabled");
       if(musicEnabled === "true"){
-        backgroundMusic.src = "music/Aerial_City.mp3";
+        backgroundIntroMusic.src = "music/nostalgia_intro.mp3";
       }
       // Load saved background if it exists
       window.addEventListener('load', () => {
@@ -96,7 +96,11 @@
           document.body.style.backgroundImage = `url('${savedBg}')`;
         }
       });
-
+      backgroundIntroMusic.addEventListener("ended",() => {
+        backgroundMusic.src = "music/nostalgia_loop.mp3";
+        backgroundMusic.play();
+        backgroundMusic.loop = true;
+      });
     </script>
   </body>
 
