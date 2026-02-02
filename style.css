@@ -155,30 +155,3 @@
     100%{background-position: -10240px 0px;}
 }
 
-/*Freefall animation*/
-.freefall_animation{
-    position : absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-    animation: run_freefall 1s steps(20) infinite;
-}
-
-/*Freefall idle*/
-.freefall_idle{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-}
-
-@keyframes run_freefall{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -20480px 0px;}
-}
