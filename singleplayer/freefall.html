@@ -369,11 +369,10 @@
           timerElement.innerHTML = "Time left: 0.00s";
           paused = true;
           answerBox.disabled = true;
+          submitFinalScore(equationsCompleted);
           if(equationsCompleted>highScore||highScore===null){
             localStorage.setItem("freefallHighScore", equationsCompleted);
             bestScoreElement.innerHTML = `Best Score: ${equationsCompleted}`;
-            
-            submitFinalScore(equationsCompleted);
             
             fetch(API + "/leaderboard-freefall")
             .then(res => {
