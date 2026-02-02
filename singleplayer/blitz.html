@@ -90,6 +90,40 @@
         backdrop-filter: blur(10px);
         z-index: -1;
       }
+      .record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: record 5s forwards;
+        pointer-events: none;
+      }
+      .second-record{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 25px;
+        color: yellow;
+        font-family: 'Exo', sans-serif;
+        animation: secondRecord 5s forwards;
+        pointer-events: none
+      }
+      @keyframes record{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:1;}
+        50% {transform: translate(-50%, -40%) scale(5); opacity:0.5;}
+        100% {transform: translate(-50%, -40%) scale(10); opacity:0;}
+      }
+      @keyframes secondRecord{
+        0% {transform: translate(-50%, -40%) scale(1); opacity:0.5;}
+        50% {transform: translate(-50%, -40%) scale(7.5); opacity:0.25;}
+        100% {transform: translate(-50%, -40%) scale(15); opacity:0;}
+      }
       body{
         background-image: url("https://images.unsplash.com/photo-1682588111755-af71d01dace3?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
