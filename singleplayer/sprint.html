@@ -369,8 +369,6 @@
               //high score stuff
               const finalTime = (Date.now() - startTime) / 1000;
               
-              submitFinalScore(finalTime);
-              
               fetch(API + "/leaderboard")
                 .then(res => {
                   if (!res.ok) throw new Error('Network response was not ok');
@@ -408,10 +406,12 @@
                 updateHighscoreDisplay();
               }
 
+              submitFinalScore(finalTime);
+
               // Display stats
               const avgReadingTime = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
               const avgTypingTime = (totalTypingTime / equationsCompleted / 1000).toFixed(2);
-
+            
               //achievements
               if(finalTime <= 40){unlockAchievement("speed_demon");}
               if(mistakes <= 0){unlockAchievement("perfect_score");}
