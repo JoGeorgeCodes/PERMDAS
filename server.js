@@ -143,12 +143,12 @@ app.get("/leaderboard", (req, res) => {
 	res.json(topScores);
 });
 
-// --- Get top 10 Freefall scores (leaderboard) ---
+// --- Get top 10 Blitz scores (leaderboard) ---
 app.get("/leaderboard-freefall", (req, res) => {
   console.log("DEBUG: GET /leaderboard-freefall called (freefall mode)");
   let bestScores = [];
   for (let name in users) {
-    // Ensure freefall exists
+    // Ensure blitzScores exists
     if (!users[name].freeFallScores) {
       users[name].freeFallScores = [];
     }
@@ -217,6 +217,53 @@ app.post("/setPassword", (req, res) => {
 	}
 	saveUsers();
 });
+
+app.post("/setStats", (req, res) => {
+	console.log("Stats Update Attempt");
+	console.log(req.body);
+
+	const { 
+		username,
+		bestScore,
+		bestTime,
+		totalGames,
+		totalEquations,
+		soundEnabled,
+		musicEnabled,
+		correctSound,
+		wrongSound,
+		answer_question,
+		reset_game,
+		unlockedAchievements
+	} = req.body;
+
+	if (!users[username]) {
+		console.log("User Not Found to update the stats!!");
+		return res.status(401).json({ success: false, message: "User not found" });
+	}
+
+	// well oc i used ai for these long strings of text, but i typud all the ifs and non repetetive stuff
+	const user = users[username];
+	if(Math.min(...user.scores) == user.bestScore){
+		user.bestTime = bestTime;
+		res.json({ success: true , trueBestScore: bestScore});
+	}else if(Math.min(...user.scores) > user.bestScore){ 
+		//they have a better best score, so add that time and then send back theri bestScore
+		user.scores
+	}
+	user.totalGames = totalGames;
+	user.totalEquations = totalEquations;
+	user.soundEnabled = soundEnabled;
+	user.musicEnabled = musicEnabled;
+	user.correctSound = correctSound;
+	user.wrongSound = wrongSound;
+	user.answer_question = answer_question;
+	user.reset_game = reset_game;
+	user.unlockedAchievements = unlockedAchievements;
+	saveUsers();
+	console.log("Stats updated for", username);
+});
+
 app.get("/users", (req, res) => {
 	console.log("GET /users called");
 	console.log("User list:", Object.keys(users));
@@ -235,7 +282,8 @@ app.get("/dump", (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+	console.log(`Server running on 0.0.0.0:${PORT}`);
 });
+
 // --- Submit a score for a user ---
