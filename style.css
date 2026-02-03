@@ -20,7 +20,7 @@
     inset: 0;
     width: 90px;
     height: 90px;
-    background: url('goldmedal.png') 0 0 no-repeat;
+    background: url('badges/goldmedal.png') 0 0 no-repeat;
     background-size: 990px 90px; /* 11 × 90 */
     animation: run_goldmedal 5s steps(11) infinite;
 }
@@ -39,7 +39,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('bronzemedal.png') 0 0 no-repeat;
+    background: transparent url('badges/bronzemedal.png') 0 0 no-repeat;
     background-size: 990px 90px; /* 11 × 90 */
     animation: run_bronzemedal 0.8s steps(11) infinite;
 }
@@ -58,7 +58,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('silvermedal.png') 0 0 no-repeat;
+    background: transparent url('badges/silvermedal.png') 0 0 no-repeat;
     background-size: 990px 90px;
     animation: run_silvermedal 0.8s steps(11) infinite;
 }
@@ -77,7 +77,7 @@
     top: 50px;
     width: 90px;
     height: 90px;
-    background: transparent url('PERMDAS_speed.png') 0 0 no-repeat;
+    background: transparent url('badges/PERMDAS_speed.png') 0 0 no-repeat;
     background-size: 720px 90px; /* 90px * 8 frames */
     animation: run_speed 0.5s steps(8) infinite;
 }
@@ -94,7 +94,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('PERMDAS_Practice.png') 0 0 no-repeat;
+    background: transparent url('badges/PERMDAS_Practice.png') 0 0 no-repeat;
     background-size: 810px 90px;
     animation: run_practice 5s steps(9) infinite;
 }
@@ -112,7 +112,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
+    background: transparent url('badges/PERMDAS_twitch.png') 0 0 no-repeat;
     background-size: 900px 90px;
     animation: run_twitch 5s steps(10) infinite;
 }
@@ -130,7 +130,7 @@
     top: 0;
     width: 90px;
     height: 100%;
-    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
+    background: transparent url('badges/PERMDAS_freefall.png') 0 0 no-repeat;
     background-size: 1800px 90px;
     animation: run_freefall 2s steps(20) infinite;
 }
