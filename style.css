@@ -1,184 +1,142 @@
+.badge-icon div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* ensure it’s above the img */
+}
+
+.badge-icon img {
+  position: relative;
+  z-index: 0; /* img stays behind */
+}
+
 
 /* Gold Medal Animation */
-.goldmedal_animation{
+.goldmedal_animation {
+    outline: 2px solid red;
     position: absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-25%, -25%);
-    background: transparent url('goldmedal.png') 0 0 no-repeat;
-    width: 1025px;
-    height: 1024px;
-    animation: run_goldmedal 0.8s steps(11) infinite;
-
+    inset: 0;
+    width: 90px;
+    height: 90px;
+    background: url('goldmedal.png') 0 0 no-repeat;
+    background-size: 990px 90px; /* 11 × 90 */
+    animation: run_goldmedal 5s steps(11) infinite;
 }
 
-/* Gold Medal Idle */
-.goldmedal_idle{
-    background: transparent url('goldmedal.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-}
 
-@keyframes run_goldmedal{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -11264px 0px;}
+@keyframes run_goldmedal {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -990px 0; }
 }
 
 /* Bronze Medal Animation */
-
-.bronzemedal_animation{
+.bronzemedal_animation {
     position: absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-25%, -25%);
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
     background: transparent url('bronzemedal.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
+    background-size: 990px 90px; /* 11 × 90 */
     animation: run_bronzemedal 0.8s steps(11) infinite;
-
 }
 
-/* Bronze Medal Idle */
-.bronzemedal_idle{
-    background: transparent url('bronzemedal.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
 
-}
-
-@keyframes run_bronzemedal{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -11264px 0px;}
+@keyframes run_bronzemedal {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -990px 0; }
 }
 
 /* Silver Medal Animation */
-
-.silvermedal_animation{
+.silvermedal_animation {
     position: absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-25%, -25%);
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
     background: transparent url('silvermedal.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
+    background-size: 990px 90px;
     animation: run_silvermedal 0.8s steps(11) infinite;
-
 }
 
-/* Silver Medal Idle */
-.silvermedal_idle{
-    background: transparent url('silvermedal.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-}
 
-@keyframes run_silvermedal{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -11264px 0px;}
+@keyframes run_silvermedal {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -990px 0; }
 }
-
 
 /* Speed Animation */
-.speed_animation{
+.speed_animation {
     position: absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-25%, -25%);
-    background: transparent url('PERMDAS_speed.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-    animation: run_speed 1s steps(8) infinite;
-
+    left: 0;
+    top: 50px;
+    width: 90px;
+    height: 90px;
+    background: transparent url('speed.png') 0 0 no-repeat;
+    background-size: 720px 90px; /* 90px * 8 frames */
+    animation: run_speed 0.5s steps(8) infinite;
 }
 
-@keyframes run_speed{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -8192px 0px;}
+@keyframes run_speed {
+    0% { background-position: 0px 0; }
+    100% { background-position: -720px 0; } /* 90px * 8 frames */
 }
-
 
 /* Practice Animation */
-.practice_animation{
-    position : absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_practice.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-    animation: run_practice 0.5s steps(9) infinite;
-
-}
-
-/* Practice Idle */
-.practice_idle{
-    position : absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_practice.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-}
-
-@keyframes run_practice{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -9216px 0px;}
-}
-
-/*Twitch animation*/
-.twitch_animation{
-    position : absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-    animation: run_twitch 1s steps(10) infinite;
-}
-
-/*Twitch idle*/
-
-.twitch_idle{
+.practice_animation {
     position: absolute;
-    left: 15%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('practice.png') 0 0 no-repeat;
+    background-size: 810px 90px;
+    animation: run_practice 5s steps(9) infinite;
 }
 
-@keyframes run_twitch{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -10240px 0px;}
+@keyframes run_practice {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -810px 0; } /* 90px * 9 frames */
 }
 
-/*Freefall animation*/
-.freefall_animation{
-    position : absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
-    animation: run_freefall 1s steps(20) infinite;
-}
-
-/*Freefall idle*/
-.freefall_idle{
+/* Twitch Animation */
+.twitch_animation {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
-    width: 1024px;
-    height: 1024px;
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('twitch.png') 0 0 no-repeat;
+    background-size: 900px 90px;
+    animation: run_twitch 5s steps(10) infinite;
 }
 
-@keyframes run_freefall{
-    0%{background-position: 0px 0px;}
-    100%{background-position: -20480px 0px;}
+@keyframes run_twitch {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -900px 0; } /* 90px * 10 frames */
+}
+
+/* Freefall Animation */
+.freefall_animation {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 100%;
+    background: transparent url('PERMDAS_freefall.png') 0 0 no-repeat;
+    background-size: 1800px 90px;
+    animation: run_freefall 2s steps(20) infinite;
+}
+
+@keyframes run_freefall {
+    0% { background-position: 0px 0; }
+    50%{ background-position: 0px 0; }
+    100% { background-position: -1800px 0; } /* 90px * 20 frames */
 }
