@@ -112,7 +112,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
+    background: transparent url('badges/PERMDAS_twitch.png') 0 0 no-repeat;
     background-size: 990px 90px;
     animation: run_twitch 2s steps(11) infinite;
 }
