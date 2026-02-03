@@ -112,16 +112,17 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('badges/PERMDAS_twitch.png') 0 0 no-repeat;
+    background: transparent url('PERMDAS_twitch.png') 0 0 no-repeat;
     background-size: 990px 90px;
-    animation: run_twitch 5s steps(11) infinite;
+    animation: run_twitch 2s steps(11) infinite;
 }
 
 @keyframes run_twitch {
     0% { background-position: 0px 0; }
-    80%{ background-position: 0px 0; }
+    70%{ background-position: 0px 0; }
     100% { background-position: -990px 0; } /* 90px * 11 frames */
 }
+
 
 /* Freefall Animation */
 .freefall_animation {
