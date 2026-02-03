@@ -6,7 +6,7 @@
     top: 15%;
     transform: translate(-25%, -25%);
     background: transparent url('goldmedal.png') 0 0 no-repeat;
-    width: 1024px;
+    width: 1025px;
     height: 1024px;
     animation: run_goldmedal 0.8s steps(11) infinite;
 
