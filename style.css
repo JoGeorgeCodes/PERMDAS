@@ -101,7 +101,7 @@
 
 @keyframes run_practice {
     0% { background-position: 0px 0; }
-    90%{ background-position: 0px 0; }
+    80%{ background-position: 0px 0; }
     100% { background-position: -810px 0; } /* 90px * 9 frames */
 }
 
@@ -113,14 +113,14 @@
     width: 90px;
     height: 90px;
     background: transparent url('badges/PERMDAS_twitch.png') 0 0 no-repeat;
-    background-size: 900px 90px;
-    animation: run_twitch 5s steps(10) infinite;
+    background-size: 990px 90px;
+    animation: run_twitch 5s steps(11) infinite;
 }
 
 @keyframes run_twitch {
     0% { background-position: 0px 0; }
-    90%{ background-position: 0px 0; }
-    100% { background-position: -900px 0; } /* 90px * 10 frames */
+    80%{ background-position: 0px 0; }
+    100% { background-position: -990px 0; } /* 90px * 10 frames */
 }
 
 /* Freefall Animation */
@@ -131,12 +131,12 @@
     width: 90px;
     height: 100%;
     background: transparent url('badges/PERMDAS_freefall.png') 0 0 no-repeat;
-    background-size: 1800px 90px;
-    animation: run_freefall 2s steps(20) infinite;
+    background-size: 1890px 90px;
+    animation: run_freefall 2s steps(21) infinite;
 }
 
 @keyframes run_freefall {
     0% { background-position: 0px 0; }
     50%{ background-position: 0px 0; }
-    100% { background-position: -1800px 0; } /* 90px * 20 frames */
+    100% { background-position: -1890px 0; } /* 90px * 20 frames */
 }
