@@ -79,7 +79,7 @@
     height: 90px;
     background: transparent url('badges/PERMDAS_speed.png') 0 0 no-repeat;
     background-size: 720px 90px; /* 90px * 8 frames */
-    animation: run_speed 0.5s steps(8) infinite;
+    animation: run_speed 0.8s steps(8) infinite;
 }
 
 @keyframes run_speed {
