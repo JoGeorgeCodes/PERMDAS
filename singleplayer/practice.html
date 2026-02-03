@@ -44,8 +44,11 @@
 
       .addition{
         clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        background-color: red;
+        background-color: rgb(255,0,0,0.5);
         white-space: nowrap;
+        transition: all 0.3s ease;
+        border: none;
+        width: 8%;
       }
       .addition:hover{
         scale: 1.1;
@@ -55,8 +58,11 @@
       }
       .subtraction{
         clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        background-color: blue;
+        background-color: rgb(0,0,255,0.5);
         white-space: nowrap;
+        transition: all 0.3s ease;
+        border: none;
+        width: 8%;
       }
       .subtraction:hover{
         scale: 1.1;
@@ -66,8 +72,11 @@
       }
       .multiplication{
         clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        background-color: purple;
+        background-color: rgb(255,0,255,0.5);
         white-space: nowrap;
+        transition: all 0.3s ease;
+        border: none;
+        width: 8%;
       }
       .multiplication:hover{
         scale: 1.1;
@@ -77,8 +86,11 @@
       }
       .division{
         clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
-        background-color: yellow;
+        background-color: rgb(255,255,0,0.5);
         white-space: nowrap;
+        transition: all 0.3s ease;
+        border: none;
+        width: 8%;
       }
       .division:hover{
         scale: 1.1;
@@ -86,9 +98,18 @@
       .division:active{
         scale: 1.1;
       }
-      
+      .box{
+        position: fixed;
+        top: 0;
+        left: 10%;
+        width: 80%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(3px);
+        z-index: -1;
+      }
       body{
-        background-image: url("https://lp-cms-production.imgix.net/features/2013/04/sunrise1_cs.jpg?auto=compress&format=auto&fit=crop&q=50&w=1200&h=800");
+        background-image: url("https://media.lmpm.website/uploads/sites/34/2023/04/Untitled-design-55.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -97,6 +118,7 @@
     </style>
   </head>
   <body>
+    <div class = "box"></div>
     <h1 class = "header" id = "header" >Practice Mode</h1>
     <p class = "equation" id="equation" style="margin-left:250px; font-size:40px;"></p>
     <textarea class = "answer_box" id = "answer_box"></textarea>
