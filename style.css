@@ -141,3 +141,20 @@
     50%{ background-position: 0px 0; }
     100% { background-position: -1890px 0; } /* 90px * 21 frames */
 }
+
+.blitzmaster_animation {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('badges/blitzmaster.png') 0 0 no-repeat;
+    background-size: 1260px 90px;
+    animation: run_blitz 2s steps(14) infinite;
+}
+
+@keyframes run_blitz {
+    0% { background-position: 0px 0; }
+    50%{ background-position: 0px 0; }
+    100% { background-position: -1260px 0; } /* 90px * 11 frames */
+}
