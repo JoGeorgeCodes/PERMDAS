@@ -356,7 +356,7 @@
         return res.json();
       })
       .then(data => {
-        displayLeaderboard(data, "leaderboard-freefall", "points");
+        displayLeaderboard(data, "leaderboard-freefall", "equations");
       })
       .catch(err => {
         console.error("freefall leaderboard fetch failed:", err);
