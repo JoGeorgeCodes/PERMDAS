@@ -77,7 +77,7 @@
     top: 50px;
     width: 90px;
     height: 90px;
-    background: transparent url('badges/PERMDAS_speed.png') 0 0 no-repeat;
+    background: transparent url('badges/speed.png') 0 0 no-repeat;
     background-size: 720px 90px; /* 90px * 8 frames */
     animation: run_speed 0.8s steps(8) infinite;
 }
@@ -94,7 +94,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('badges/PERMDAS_Practice.png') 0 0 no-repeat;
+    background: transparent url('badges/practice.png') 0 0 no-repeat;
     background-size: 810px 90px;
     animation: run_practice 4s steps(9) infinite;
 }
@@ -112,7 +112,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('badges/PERMDAS_twitch.png') 0 0 no-repeat;
+    background: transparent url('badges/twitch.png') 0 0 no-repeat;
     background-size: 990px 90px;
     animation: run_twitch 2s steps(11) infinite;
 }
@@ -131,7 +131,7 @@
     top: 0;
     width: 90px;
     height: 100%;
-    background: transparent url('badges/PERMDAS_freefall.png') 0 0 no-repeat;
+    background: transparent url('badges/freefall.png') 0 0 no-repeat;
     background-size: 1890px 90px;
     animation: run_freefall 2s steps(21) infinite;
 }
