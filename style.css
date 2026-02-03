@@ -96,12 +96,12 @@
     height: 90px;
     background: transparent url('badges/PERMDAS_Practice.png') 0 0 no-repeat;
     background-size: 810px 90px;
-    animation: run_practice 5s steps(9) infinite;
+    animation: run_practice 4s steps(9) infinite;
 }
 
 @keyframes run_practice {
     0% { background-position: 0px 0; }
-    80%{ background-position: 0px 0; }
+    75%{ background-position: 0px 0; }
     100% { background-position: -810px 0; } /* 90px * 9 frames */
 }
 
@@ -120,7 +120,7 @@
 @keyframes run_twitch {
     0% { background-position: 0px 0; }
     80%{ background-position: 0px 0; }
-    100% { background-position: -990px 0; } /* 90px * 10 frames */
+    100% { background-position: -990px 0; } /* 90px * 11 frames */
 }
 
 /* Freefall Animation */
@@ -138,5 +138,5 @@
 @keyframes run_freefall {
     0% { background-position: 0px 0; }
     50%{ background-position: 0px 0; }
-    100% { background-position: -1890px 0; } /* 90px * 20 frames */
+    100% { background-position: -1890px 0; } /* 90px * 21 frames */
 }
