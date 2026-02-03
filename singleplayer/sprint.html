@@ -156,6 +156,7 @@
     <a href = "../modes.html"><button class = "back">Modes</button></a>
 
     <script>
+      
       if(localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"){
         //alert("You cannot submit scores to the leaderboard without a password")
       }
@@ -304,7 +305,7 @@
         secondRecord.className = "second-record";
         secondRecord.textContent = text;
         document.body.appendChild(secondRecord);
-        console.log(secondRecord);
+        console.log("Record animation created:", text);
       }
 
       updateEquation();
@@ -369,42 +370,61 @@
               //high score stuff
               const finalTime = (Date.now() - startTime) / 1000;
               
+              // Check leaderboard position
               fetch(API + "/leaderboard")
                 .then(res => {
                   if (!res.ok) throw new Error('Network response was not ok');
                   return res.json();
                 })
                 .then(data => {
-                  if(data[0].name === localStorage.getItem("username")&&data[0].score===finalTime){
+                  const username = localStorage.getItem("username");
+                  
+                  // Check for world record
+                  if(data[0] && data[0].name === username && data[0].score === finalTime){
                     record("WORLD RECORD");
                     recordType = true;
-                    
                   }
-                  if(!recordType){
+                  // Check for top 3
+                  else {
                     for(let i = 0; i < data.length; i++){
-                      if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<4){
-                        record("TOP 3");
-                        recordType = true;
-                      }
-                      if(data[i].name === localStorage.getItem("username")&&data[i].score===finalTime&&i<11){
-                        record("TOP 10");
-                        recordType = true;
+                      if(data[i].name === username && data[i].score === finalTime){
+                        if(i < 3){
+                          record("TOP 3");
+                          recordType = true;
+                          break;
+                        }
+                        else if(i < 10){
+                          record("TOP 10");
+                          recordType = true;
+                          break;
+                        }
                       }
                     }
                   }
-                  console.log(data);
+                  
+                  //check for personal best
+                  if (bestTime === null || finalTime < bestTime) {
+                    bestTime = finalTime;
+                    if(!recordType){
+                      record("PERSONAL BEST");
+                    }
+                    localStorage.setItem("bestTime", bestTime.toString());
+                    updateHighscoreDisplay();
+                  }
+                  
+                  console.log("Leaderboard data:", data);
                 })
                 .catch(err => {
                   console.error("Sprint leaderboard fetch failed:", err);
-                  return;
+                  
+                  //if agnis server does a kamakazi
+                  if (bestTime === null || finalTime < bestTime) {
+                    bestTime = finalTime;
+                    record("PERSONAL BEST");
+                    localStorage.setItem("bestTime", bestTime.toString());
+                    updateHighscoreDisplay();
+                  }
                 });
-              
-              if (bestTime === null || finalTime < bestTime) {
-                bestTime = finalTime;
-                if(!recordType){record("PERSONAL BEST");}
-                localStorage.setItem("bestTime", bestTime.toString());
-                updateHighscoreDisplay();
-              }
 
               submitFinalScore(finalTime);
 
