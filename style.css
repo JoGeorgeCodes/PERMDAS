@@ -148,7 +148,7 @@
     top: 0;
     width: 90px;
     height: 90px;
-    background: transparent url('badges/blitzmaster.png') 0 0 no-repeat;
+    background: transparent url('badges/blitz-master.png') 0 0 no-repeat;
     background-size: 1260px 90px;
     animation: run_blitz 2s steps(14) infinite;
 }
