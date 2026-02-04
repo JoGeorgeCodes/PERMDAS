@@ -156,10 +156,10 @@
 
         if (!username) {
           console.error("No username found in localStorage");
-          return;
+          return Promise.reject("No username");
         }
 
-        fetch(API + "/score-blitz", {
+        return fetch(API + "/score-blitz", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -170,8 +170,12 @@
         .then(res => res.json())
         .then(data => {
           console.log("Score submitted:", data.user);
+          return data;
         })
-        .catch(err => console.error("Score submit failed:", err));
+        .catch(err => {
+          console.error("Score submit failed:", err);
+          throw err;
+        });
       }
 
       //high scores:
@@ -274,59 +278,85 @@
             //high score stuff
             const finalScore = score;
             
-            // Check leaderboard position FIRST, then handle personal best
-            fetch(API + "/leaderboard-blitz")
-            .then(res => {
-              if (!res.ok) throw new Error('Network response was not ok');
-              return res.json();
-            })
-            .then(data => {
-              const username = localStorage.getItem("username");
-              
-              // Check for world record
-              if(data[0] && data[0].name === username && data[0].score === finalScore){
-                record("WORLD RECORD");
-                recordType = true;
-              }
-              // Check for top 3/top 10
-              else {
-                for(let i = 0; i < data.length; i++){
-                  if(data[i].name === username && data[i].score === finalScore){
-                    if(i < 3){
-                      record("TOP 3");
-                      recordType = true;
-                      break;
-                    }
-                    else if(i < 10){
-                      record("TOP 10");
-                      recordType = true;
-                      break;
+            // FIRST: Submit the score
+            submitFinalScore(finalScore)
+              .then(() => {
+                // Wait a bit for server to update
+                return new Promise(resolve => setTimeout(resolve, 500));
+              })
+              .then(() => {
+                // NOW check leaderboard position after score is submitted
+                return fetch(API + "/leaderboard-blitz");
+              })
+              .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+              })
+              .then(data => {
+                const username = localStorage.getItem("username");
+                console.log("=== LEADERBOARD CHECK (BLITZ) ===");
+                console.log("Username:", username);
+                console.log("Final Score:", finalScore);
+                console.log("Leaderboard data:", data);
+                console.log("First place:", data[0]);
+                
+                // Check for world record
+                if(data[0] && data[0].name === username && data[0].score === finalScore){
+                  console.log("WORLD RECORD DETECTED!");
+                  record("WORLD RECORD");
+                  recordType = true;
+                }
+                // Check for top 3/top 10
+                else {
+                  for(let i = 0; i < data.length; i++){
+                    console.log(`Checking position ${i}: ${data[i].name} with score ${data[i].score}`);
+                    if(data[i].name === username && data[i].score === finalScore){
+                      console.log(`Match found at position ${i}`);
+                      if(i < 3){
+                        console.log("TOP 3 DETECTED!");
+                        record("TOP 3");
+                        recordType = true;
+                        break;
+                      }
+                      else if(i < 10){
+                        console.log("TOP 10 DETECTED!");
+                        record("TOP 10");
+                        recordType = true;
+                        break;
+                      }
                     }
                   }
                 }
-              }
-              
-              // NOW check for personal best (only if no other record was triggered)
-              if (bestScore === null || finalScore > bestScore) {
-                if(!recordType){
-                  record("PERSONAL BEST");
+                
+                console.log("Record type triggered:", recordType);
+                console.log("Best score:", bestScore, "Final score:", finalScore);
+                
+                // NOW check for personal best (only if no other record was triggered)
+                if (bestScore === null || finalScore > bestScore) {
+                  if(!recordType){
+                    console.log("PERSONAL BEST DETECTED!");
+                    record("PERSONAL BEST");
+                  } else {
+                    console.log("Personal best achieved but higher record type already shown");
+                  }
+                  bestScore = finalScore;
+                  localStorage.setItem("bestScore", bestScore.toString());
+                  updateHighscoreDisplay();
                 }
-                bestScore = finalScore;
-                localStorage.setItem("bestScore", bestScore.toString());
-                updateHighscoreDisplay();
-              }
-            })
-            .catch(err => {
-              console.error("Blitz leaderboard fetch failed:", err);
-              
-              // Still handle personal best even if leaderboard fails
-              if (bestScore === null || finalScore > bestScore) {
-                record("PERSONAL BEST");
-                bestScore = finalScore;
-                localStorage.setItem("bestScore", bestScore.toString());
-                updateHighscoreDisplay();
-              }
-            });
+                
+                console.log("=== END LEADERBOARD CHECK ===");
+              })
+              .catch(err => {
+                console.error("Blitz leaderboard fetch failed:", err);
+                
+                // Still handle personal best even if leaderboard fails
+                if (bestScore === null || finalScore > bestScore) {
+                  record("PERSONAL BEST");
+                  bestScore = finalScore;
+                  localStorage.setItem("bestScore", bestScore.toString());
+                  updateHighscoreDisplay();
+                }
+              });
 
             // Display stats
             const avgReadingTime = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
@@ -341,9 +371,6 @@
             equationElement.innerHTML = `Time's Up!<br>Final Score: ${finalScore}<br>Avg Reading: ${avgReadingTime}s <br> Avg Typing: ${avgTypingTime}s`;
             answerBox.disabled = true;
             counterElement.textContent = `Final Score: ${score}`;
-
-            // Submit score to server
-            submitFinalScore(finalScore);
 
             return;
           }
