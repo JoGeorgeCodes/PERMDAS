@@ -166,10 +166,10 @@
       
         if (!username) {
           console.error("No username found in localStorage");
-          return;
+          return Promise.reject("No username");
         }
       
-        fetch(API + "/score", {
+        return fetch(API + "/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -181,10 +181,12 @@
         .then(res => res.json())
         .then(data => {
           console.log("Score submitted:", data.user);
+          return data;
         })
         .catch(err => {
           console.error("Score submit failed:", err);
-          alert("Score Submit failed: "+err)
+          alert("Score Submit failed: "+err);
+          throw err;
         });
       }
 
@@ -370,30 +372,48 @@
               //high score stuff
               const finalTime = (Date.now() - startTime) / 1000;
               
-              // Check leaderboard position
-              fetch(API + "/leaderboard")
+              // FIRST: Submit the score
+              submitFinalScore(finalTime)
+                .then(() => {
+                  // Wait a bit for server to update
+                  return new Promise(resolve => setTimeout(resolve, 500));
+                })
+                .then(() => {
+                  // NOW check leaderboard position after score is submitted
+                  return fetch(API + "/leaderboard");
+                })
                 .then(res => {
                   if (!res.ok) throw new Error('Network response was not ok');
                   return res.json();
                 })
                 .then(data => {
                   const username = localStorage.getItem("username");
+                  console.log("=== LEADERBOARD CHECK ===");
+                  console.log("Username:", username);
+                  console.log("Final Time:", finalTime);
+                  console.log("Leaderboard data:", data);
+                  console.log("First place:", data[0]);
                   
                   // Check for world record
                   if(data[0] && data[0].name === username && data[0].score === finalTime){
+                    console.log("WORLD RECORD DETECTED!");
                     record("WORLD RECORD");
                     recordType = true;
                   }
                   // Check for top 3
                   else {
                     for(let i = 0; i < data.length; i++){
+                      console.log(`Checking position ${i}: ${data[i].name} with score ${data[i].score}`);
                       if(data[i].name === username && data[i].score === finalTime){
+                        console.log(`Match found at position ${i}`);
                         if(i < 3){
+                          console.log("TOP 3 DETECTED!");
                           record("TOP 3");
                           recordType = true;
                           break;
                         }
                         else if(i < 10){
+                          console.log("TOP 10 DETECTED!");
                           record("TOP 10");
                           recordType = true;
                           break;
@@ -402,22 +422,28 @@
                     }
                   }
                   
-                  //check for personal best
+                  console.log("Record type triggered:", recordType);
+                  console.log("Best time:", bestTime, "Final time:", finalTime);
+                  
+                  // NOW check for personal best (only if no other record was triggered)
                   if (bestTime === null || finalTime < bestTime) {
                     bestTime = finalTime;
                     if(!recordType){
+                      console.log("PERSONAL BEST DETECTED!");
                       record("PERSONAL BEST");
+                    } else {
+                      console.log("Personal best achieved but higher record type already shown");
                     }
                     localStorage.setItem("bestTime", bestTime.toString());
                     updateHighscoreDisplay();
                   }
                   
-                  console.log("Leaderboard data:", data);
+                  console.log("=== END LEADERBOARD CHECK ===");
                 })
                 .catch(err => {
                   console.error("Sprint leaderboard fetch failed:", err);
                   
-                  //if agnis server does a kamakazi
+                  // Still handle personal best even if leaderboard fails
                   if (bestTime === null || finalTime < bestTime) {
                     bestTime = finalTime;
                     record("PERSONAL BEST");
@@ -425,8 +451,6 @@
                     updateHighscoreDisplay();
                   }
                 });
-
-              submitFinalScore(finalTime);
 
               // Display stats
               const avgReadingTime = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
