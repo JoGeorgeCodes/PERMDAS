@@ -204,19 +204,16 @@
       }
 
       function record(text){
-        if(!recordType){
-          recordType = true;
-          const record = document.createElement("p");
-          record.className = "record";
-          record.textContent = text;
-          document.body.appendChild(record);
-  
-          const secondRecord = document.createElement("p");
-          secondRecord.className = "second-record";
-          secondRecord.textContent = text;
-          document.body.appendChild(secondRecord);
-          console.log(secondRecord);
-        }
+        const record = document.createElement("p");
+        record.className = "record";
+        record.textContent = text;
+        document.body.appendChild(record);
+
+        const secondRecord = document.createElement("p");
+        secondRecord.className = "second-record";
+        secondRecord.textContent = text;
+        document.body.appendChild(secondRecord);
+        console.log("Record animation created:", text);
       }
       
       function switchPhase(newPhase) {
@@ -338,10 +335,10 @@
       
         if (!username) {
           console.error("No username found in localStorage");
-          return;
+          return Promise.reject("No username");
         }
       
-        fetch(API + "/score-freefall", {
+        return fetch(API + "/score-freefall", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -352,8 +349,12 @@
         .then(res => res.json())
         .then(data => {
           console.log("Score submitted:", data.user);
+          return data;
         })
-        .catch(err => console.error("Score submit failed:", err));
+        .catch(err => {
+          console.error("Score submit failed:", err);
+          throw err;
+        });
       }
 
       generateBag();
@@ -369,41 +370,85 @@
           timerElement.innerHTML = "Time left: 0.00s";
           paused = true;
           answerBox.disabled = true;
-          submitFinalScore(equationsCompleted);
+          
+          // Check if this is a new high score
           if(equationsCompleted>highScore||highScore===null){
             localStorage.setItem("freefallHighScore", equationsCompleted);
             bestScoreElement.innerHTML = `Best Score: ${equationsCompleted}`;
             
-            fetch(API + "/leaderboard-freefall")
-            .then(res => {
-              if (!res.ok) throw new Error('Network response was not ok');
-              return res.json();
-            })
-            .then(data => {
-              if(data[0].name === localStorage.getItem("username")&&data[0].score===equationsCompleted){
-                record("WORLD RECORD");
-                recordType = true;
-
-              }
-              if(!recordType){
-                for(let i = 0; i < data.length; i++){
-                  if(data[i].name === localStorage.getItem("username")&&data[i].score===equationsCompleted&&i<4){
-                    record("TOP 3");
-                    recordType = true;
-                  }
-                  if(data[i].name === localStorage.getItem("username")&&data[i].score===equationsCompleted&&i<11){
-                    record("TOP 10");
-                    recordType = true;
+            // FIRST: Submit the score
+            submitFinalScore(equationsCompleted)
+              .then(() => {
+                // Wait a bit for server to update
+                return new Promise(resolve => setTimeout(resolve, 500));
+              })
+              .then(() => {
+                // NOW check leaderboard position after score is submitted
+                return fetch(API + "/leaderboard-freefall");
+              })
+              .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+              })
+              .then(data => {
+                const username = localStorage.getItem("username");
+                console.log("=== LEADERBOARD CHECK (FREEFALL) ===");
+                console.log("Username:", username);
+                console.log("Final Score:", equationsCompleted);
+                console.log("Leaderboard data:", data);
+                console.log("First place:", data[0]);
+                
+                // Check for world record
+                if(data[0] && data[0].name === username && data[0].score === equationsCompleted){
+                  console.log("WORLD RECORD DETECTED!");
+                  record("WORLD RECORD");
+                  recordType = true;
+                }
+                // Check for top 3/top 10
+                else {
+                  for(let i = 0; i < data.length; i++){
+                    console.log(`Checking position ${i}: ${data[i].name} with score ${data[i].score}`);
+                    if(data[i].name === username && data[i].score === equationsCompleted){
+                      console.log(`Match found at position ${i}`);
+                      if(i < 3){
+                        console.log("TOP 3 DETECTED!");
+                        record("TOP 3");
+                        recordType = true;
+                        break;
+                      }
+                      else if(i < 10){
+                        console.log("TOP 10 DETECTED!");
+                        record("TOP 10");
+                        recordType = true;
+                        break;
+                      }
+                    }
                   }
                 }
-              }
-              console.log(data);
-            })
-            .catch(err => {
-              console.error("Freefall leaderboard fetch failed:", err);
-              return;
-            });
-            record("PERSONAL BEST");
+                
+                console.log("Record type triggered:", recordType);
+                
+                // Show personal best only if no other record was triggered
+                if(!recordType){
+                  console.log("PERSONAL BEST DETECTED!");
+                  record("PERSONAL BEST");
+                } else {
+                  console.log("Personal best achieved but higher record type already shown");
+                }
+                
+                console.log("=== END LEADERBOARD CHECK ===");
+              })
+              .catch(err => {
+                console.error("Freefall leaderboard fetch failed:", err);
+                
+                // Still show personal best even if leaderboard fails
+                if(!recordType){
+                  record("PERSONAL BEST");
+                }
+              });
+          } else {
+            // Not a high score, just submit
+            submitFinalScore(equationsCompleted);
           }
         }
       }, 10)
