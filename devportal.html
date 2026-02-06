@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Bash Command Client</title>
+</head>
+<body>
+	<h2>Bash Command Runner</h2>
+
+	<input id="cmd" type="text" placeholder="Enter bash command" style="width:400px;">
+	<button onclick="runCmd()">Run</button>
+
+	<pre id="output"></pre>
+
+	<script src="../config.js"></script>
+	<script>
+	// config.js must define: const API = "http://localhost:3000/run";
+
+	async function runCmd() {
+		const cmd = document.getElementById("cmd").value;
+		const out = document.getElementById("output");
+		out.textContent = "Running...";
+
+		try {
+			const res = await fetch(API, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ command: cmd })
+			});
+
+			const data = await res.json();
+			out.textContent = data.output || data.error || "No output";
+		} catch (e) {
+			out.textContent = "Request failed: " + e;
+		}
+	}
+	</script>
+</body>
+</html>
