@@ -2,38 +2,47 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Bash Command Client</title>
+	<title>Dev Portal</title>
 </head>
 <body>
-	<h2>Bash Command Runner</h2>
+	<h2>Dev Portal Controls</h2>
 
-	<input id="cmd" type="text" placeholder="Enter bash command" style="width:400px;">
-	<button onclick="runCmd()">Run</button>
+	<button onclick="restartServer()">Restart Server</button>
+	<button onclick="updateServer()">Overwrite Server File From GitHub</button>
 
-	<pre id="output"></pre>
+	<pre id="status"></pre>
 
-	<script src="config.js"></script>
+	<script src="../config.js"></script>
 	<script>
-	// config.js must define: const API = "http://localhost:3000/run";
+	const statusEl = document.getElementById("status");
 
-	async function runCmd() {
-		const cmd = document.getElementById("cmd").value;
-		const out = document.getElementById("output");
-		out.textContent = "Running...";
+	function setStatus(msg) {
+		statusEl.textContent = msg;
+	}
 
+	async function restartServer() {
+		setStatus("Sending restart request...");
 		try {
-			const res = await fetch(API, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({ command: cmd })
+			const res = await fetch(API + "/devportal-restart", {
+				method: "POST"
 			});
-
-			const data = await res.json();
-			out.textContent = data.output || data.error || "No output";
+			const text = await res.text();
+			setStatus("Restart response: " + text);
 		} catch (e) {
-			out.textContent = "Request failed: " + e;
+			setStatus("Restart failed: " + e);
+		}
+	}
+
+	async function updateServer() {
+		setStatus("Sending overwrite request...");
+		try {
+			const res = await fetch(API + "/dev-update-from-github", {
+				method: "POST"
+			});
+			const text = await res.text();
+			setStatus("Update response: " + text);
+		} catch (e) {
+			setStatus("Update failed: " + e);
 		}
 	}
 	</script>
