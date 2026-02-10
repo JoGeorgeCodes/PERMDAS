@@ -308,65 +308,6 @@ app.get("/dump", (req, res) => {
   res.type("json").send(data);
 });
 
-const { spawn } = require("child_process");
-
-function runDevPortal(cmd) {
-	const child = spawn("node", ["devportal.js", cmd], {
-		detached: true,
-		stdio: "inherit"
-	});
-
-	child.unref();
-}
-app.post("/devportal-restart", (req, res) => {
-	console.log("rest art")
-	runDevPortal("restart");
-	res.send("devportal launched");
-});
-
-
-const https = require("https");
-
-const GH_URL = "https://cunfuzed.github.io/PERMDAS/server.js";
-const LOCAL_FILE = "permdas.js"; //yes theyr diff
-
-
-
-app.post("/dev-update-from-github", (req, res) => {
-
-
-	console.log("Downloading latest server.js from GitHub...");
-
-	https.get(GH_URL, r => {
-		if (r.statusCode !== 200) {
-			return res.status(500).send("download failed: " + r.statusCode);
-		}
-
-		let data = "";
-
-		r.on("data", chunk => data += chunk);
-
-		r.on("end", () => {
-			try {
-				fs.writeFileSync(LOCAL_FILE, data);
-				console.log("permdas.js overwritten from GitHub");
-
-				res.send("updated from github");
-
-			} catch (e) {
-				console.log("write failed:", e);
-				res.status(500).send("write failed");
-			}
-		});
-
-	}).on("error", e => {
-		console.log("download error:", e);
-		res.status(500).send("download error");
-	});
-});
-
-
-
 // Start server
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on 0.0.0.0:${PORT}`);
