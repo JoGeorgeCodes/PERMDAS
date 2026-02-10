@@ -150,7 +150,9 @@
     <p class="counter" id="counter"> Equations Left: 40 </p>
     <a href = "../modes.html"><button class = "back">Modes</button></a>
     <script>
-
+      if(!localStorage.passwordHash ||localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"){
+        alert("You cannot submit scores to the leaderboard without a password")
+      }
       function submitFinalScore(finalScore) {
         const username = localStorage.getItem("username");
 
