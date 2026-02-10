@@ -24,7 +24,7 @@
 	async function restartServer() {
 		setStatus("Sending restart request...");
 		try {
-			const res = await fetch(API + "/devportal-restart", {
+			const res = await fetch(devportal_API + "/devportal-restart", {
 				method: "POST"
 			});
 			const text = await res.text();
@@ -37,7 +37,7 @@
 	async function updateServer() {
 		setStatus("Sending overwrite request...");
 		try {
-			const res = await fetch(API + "/dev-update-from-github", {
+			const res = await fetch(devportal_API + "/dev-update-from-github", {
 				method: "POST"
 			});
 			const text = await res.text();
