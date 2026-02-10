@@ -52,6 +52,29 @@ function saveUsers() {
 	console.log("Save complete.");
 }
 
+// create duel
+app.post("/create-duel", (req, res) => {
+	console.log("Creating Duel POST thing");
+	const {
+		host,
+		passwordHash
+	} = req.body;
+	
+	if (!users[host].passwordHash && users[host].passwordHash != passwordHash)
+		return res.status(401).json({
+			error: "Not authorized"
+		});
+	
+	var room = createDuel();
+	rooms.push(room)
+
+	res.json({
+		success: true,
+		id: room.id
+	});
+});
+
+
 // --- Register a new username ---
 app.post("/register", (req, res) => {
 	console.log("POST /register called");
