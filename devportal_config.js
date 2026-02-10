@@ -1,1 +1,1 @@
-var devportal_API = "https://double-generates-satisfaction-memories.trycloudflare.com" //urgent: remove slash at the end
+var devportal_API = "https://warranties-limousines-keep-lace.trycloudflare.com" //urgent: remove slash at the end
