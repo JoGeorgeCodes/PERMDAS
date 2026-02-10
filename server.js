@@ -18,6 +18,19 @@ function Room (id, type){
   this.id = id;
   this.type = type;
 }
+function genID(){
+	var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+	var id = "";
+	for(var i = 0; i < 3; i++){
+		id += chars[Math.floor(Math.random() * chars.length)];
+	}
+	return id;
+
+}
+function createDuel(){
+  room = new Room(genID(), "duel")
+  return room
+}
 
 // Loadusers  from file if it exists
 let users = {};
