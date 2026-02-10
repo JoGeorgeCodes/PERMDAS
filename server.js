@@ -13,7 +13,13 @@ app.use(express.json());
 // File where data is stored
 const DATA_FILE = "users.json";
 
-// Load users from file if it exists
+let rooms = [];
+function Room (id, type){
+  this.id = id;
+  this.type = type;
+}
+
+// Loadusers  from file if it exists
 let users = {};
 if (fs.existsSync(DATA_FILE)) {
   console.log("DATA_FILE exists. Loading users...");
