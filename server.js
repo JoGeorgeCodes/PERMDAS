@@ -81,12 +81,20 @@ app.post("/enter-matchmaking", (req, res) => {
 		name,
 		passwordHash
 	} = req.body;
-	
+	if(!users[name]){
+		return res.status(401).json({
+			error: "not authorized -- you dont even exist"
+		});
+	}
 	if (!users[name].passwordHash && users[name].passwordHash != passwordHash)
 		return res.status(401).json({
-			error: "Not authorized"
+			error: "not authorized (password wrong)"
 		});
-
+	if(peopleInMatchmaking.some((e)=>(e.name == name)){
+		return res.status(409).json({
+			error: "i hope your not a clone, bc you can only sign up ONCE --when kids code"
+		});
+	}
 	if(peopleInMatchmaking.length > 0){
 		//create a room for both
 		var room = createDuel();
