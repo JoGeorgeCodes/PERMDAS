@@ -352,13 +352,16 @@
 
 
 
-    function getAnimationClass(achievementId, ) {
+    function getAnimationClass(achievementId, isUnlocked) {
+      if (!isUnlocked) {
+        return 'locked_animation';
+      }
       return {
         'practice_pro': 'practice_animation',
         'speed_demon': 'speed_animation',
         'twitch': 'twitch_animation',
         '130freefall': 'freefall_animation',
-        'blitz_master': 'blitzmaster_animation'
+        'blitz_master': 'blitzmaster_animation',
         // Add more if you have sprite sheets for other badges
       }[achievementId] || '';
     }
@@ -374,7 +377,7 @@
         const typeClass = isUnlocked ? `badge-${a.type}` : '';
         
 
-        animationClass = getAnimationClass(a.id, );
+        animationClass = getAnimationClass(a.id, isUnlocked);
         
 
         const badgeCard = document.createElement('div');
