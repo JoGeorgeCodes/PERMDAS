@@ -13,7 +13,7 @@ app.use(express.json());
 const DATA_FILE = "users.json";
 
 let rooms = [];
-
+let peopleInMatchmaking = [];
 function Room(id, type) {
 	this.id = id;
 	this.type = type;
@@ -36,6 +36,7 @@ function createDuel() {
 
 // Loadusers  from file if it exists
 let users = {};
+
 if (fs.existsSync(DATA_FILE)) {
 	console.log("DATA_FILE exists. Loading users...");
 	const data = fs.readFileSync(DATA_FILE, "utf8");
@@ -52,7 +53,7 @@ function saveUsers() {
 	console.log("Save complete.");
 }
 
-// create duel
+// create duel (private)
 app.post("/create-duel", (req, res) => {
 	console.log("Creating Duel POST thing");
 	const {
@@ -72,6 +73,42 @@ app.post("/create-duel", (req, res) => {
 		success: true,
 		id: room.id
 	});
+});
+
+app.post("/enter-matchmaking", (req, res) => {
+	console.log("Person entered matchmaking");
+	const {
+		name,
+		passwordHash
+	} = req.body;
+	
+	if (!users[name].passwordHash && users[name].passwordHash != passwordHash)
+		return res.status(401).json({
+			error: "Not authorized"
+		});
+
+	if(peopleInMatchmaking.length > 0){
+		//create a room for both
+		var room = createDuel();
+		rooms.push(room)
+		var other = peopleInMatchmaking.shift()
+		
+		res.json({
+			success: true,
+			id: room.id
+		});
+		other.res.json({
+			success: true,
+			id: room.id
+		});
+	}else{
+		peopleInMatchmaking.push({
+			name: name,
+			res: res
+		})
+	}
+
+
 });
 
 
