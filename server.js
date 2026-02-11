@@ -30,7 +30,7 @@ function genID() {
 }
 
 function createDuel() {
-	room = new Room(genID(), "duel")
+	var room = new Room(genID(), "duel")
 	return room;
 }
 
