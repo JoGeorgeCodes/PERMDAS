@@ -91,7 +91,7 @@ app.post("/enter-matchmaking", (req, res) => {
 		return res.status(401).json({
 			error: "not authorized (password wrong)"
 		});
-	if(peopleInMatchmaking.some((e)=>(e.name == name)){
+	if(peopleInMatchmaking.some((e)=>(e.name == name))){
 		return res.status(409).json({
 			error: "i hope your not a clone, bc you can only sign up ONCE --when kids code"
 		});
