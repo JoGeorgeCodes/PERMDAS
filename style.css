@@ -158,3 +158,13 @@
     33%{ background-position: 0px 0; }
     100% { background-position: -1260px 0; } /* 90px * 11 frames */
 }
+
+.locked_animation{
+    position: absolute; 
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('badges/locked.png') 0 0 no-repeat;
+    background-size: 90px 90px;
+}
