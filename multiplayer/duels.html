@@ -100,6 +100,44 @@
     </div>
     <button class = "que" id = "que">Enter Matchmaking</button>
     <script>
+      <script>
+      const queButton = document.getElementById("que");
+      
+      queButton.addEventListener("click", async () => {
+          queButton.disabled = true;
+          queButton.textContent = "Searching for opponent...";
+      
+          try {
+              const res = await fetch(API + "/enter-matchmaking", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      name: localStorage.username,
+                      passwordHash: localStorage.passwordHash
+                  })
+              });
+      
+              const data = await res.json();
+      
+              if (data.success && data.id) {
+                  // redirect to game with room id
+                  location.href = "/multiplayer/duels/duelsmatch?id=" + data.id;
+              } else if (data.waiting) {
+                  queButton.textContent = "Waiting for opponent...";
+              } else {
+                  alert("Error entering matchmaking: " + (data.error || "Unknown error"));
+                  queButton.disabled = false;
+                  queButton.textContent = "Enter Matchmaking";
+              }
+          } catch (e) {
+              console.error("Matchmaking request failed:", e);
+              alert("Request failed. Check console for details.");
+              queButton.disabled = false;
+              queButton.textContent = "Enter Matchmaking";
+          }
+      });
       
     </script>
   </body>
