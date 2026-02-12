@@ -13,11 +13,16 @@ app.use(express.json());
 // File where data is stored
 const DATA_FILE = "users.json";
 
-let rooms = [];
+let rooms = {};
 let peopleInMatchmaking = [];
+function Player(theirWS, name){
+	this.theirWS = theirWS;
+	this.name = name;
+}
 function Room(id, type) {
 	this.id = id;
 	this.type = type;
+	this.players = []; //insidu gowes Player
 }
 
 function genID() {
