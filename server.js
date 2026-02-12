@@ -13,7 +13,7 @@ app.use(express.json());
 // File where data is stored
 const DATA_FILE = "users.json";
 
-let rooms = {};
+let rooms = {}; // key is rooms id
 let peopleInMatchmaking = [];
 function Player(theirWS, name){
 	this.theirWS = theirWS;
@@ -40,7 +40,6 @@ function createDuel() {
 	return room;
 }
 
-// Loadusers  from file if it exists
 let users = {};
 
 if (fs.existsSync(DATA_FILE)) {
@@ -59,27 +58,27 @@ function saveUsers() {
 	console.log("Save complete.");
 }
 
-// create duel (private)
-app.post("/create-duel", (req, res) => {
-	console.log("Creating Duel POST thing");
-	const {
-		host,
-		passwordHash
-	} = req.body;
+// create duel (private) -- FIX: MAKE ROOMS APPEND BY KEY NOT PUSH
+// app.post("/create-duel", (req, res) => {
+// 	console.log("Creating Duel POST thing");
+// 	const {
+// 		host,
+// 		passwordHash
+// 	} = req.body;
 	
-	if (!users[host].passwordHash && users[host].passwordHash != passwordHash)
-		return res.status(401).json({
-			error: "Not authorized"
-		});
+// 	if (!users[host].passwordHash && users[host].passwordHash != passwordHash)
+// 		return res.status(401).json({
+// 			error: "Not authorized"
+// 		});
 	
-	var room = createDuel();
-	rooms.push(room)
+// 	var room = createDuel();
+// 	rooms.push(room)
 
-	res.json({
-		success: true,
-		id: room.id
-	});
-});
+// 	res.json({
+// 		success: true,
+// 		id: room.id
+// 	});
+// });
 
 app.post("/enter-matchmaking", (req, res) => {
 	console.log("Person entered matchmaking");
@@ -104,7 +103,7 @@ app.post("/enter-matchmaking", (req, res) => {
 	if(peopleInMatchmaking.length > 0){
 		//create a room for both
 		var room = createDuel();
-		rooms.push(room)
+		rooms[room.id] = room;
 		var other = peopleInMatchmaking.shift()
 		
 		res.json({
@@ -506,15 +505,22 @@ const { WebSocketServer } = require("ws");
 const wss = new WebSocketServer({ server: server });
 
 wss.on("connection", (ws, req) => {
+	
 	console.log("ws connection");
-
 	ws.on("message", msg => {
+		
 		console.log("through ws: ", msg.toString());
+		if(msg.connectMsg){
+			rooms[msg.id].players.push(new Player(ws, name))
+		}else{
+			var room = rooms[msg.id];
+		
 		//echo
 		// ws.send(JSON.stringify({
 		// 	type: "echo",
 		// 	data: msg.toString()
-		// }));
+		// 
+		}
 	});
 
 	ws.on("close", () => {
