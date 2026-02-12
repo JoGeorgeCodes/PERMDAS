@@ -176,12 +176,12 @@
     width: 90px;
     height: 90px;
     background: transparent url('badges/first_steps.png') 0 0 no-repeat;
-    background-size: 5130px 90px; /* 90px * 8 frames */
-    animation: run_first_steps 3s steps(57) infinite;
+    background-size: 4500px 90px; /* 90px * 8 frames */
+    animation: run_first_steps 3s steps(50) infinite;
 }
 
 @keyframes run_first_steps {
     0% { background-position: 0px 0; }
-    90%{ background-position: 0px 0; }
-    100% { background-position: -5130px 0; } /* 90px * 8 frames */
+    50%{ background-position: 0px 0; }
+    100% { background-position: -4500px 0; } /* 90px * 50 frames */
 }
