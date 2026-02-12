@@ -168,3 +168,20 @@
     background: transparent url('badges/locked.png') 0 0 no-repeat;
     background-size: 90px 90px;
 }
+
+.first_steps_animation{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('badges/first_steps.png') 0 0 no-repeat;
+    background-size: 5130px 90px; /* 90px * 8 frames */
+    animation: run_first_steps 3s steps(8) infinite;
+}
+
+@keyframes run_first_steps {
+    0% { background-position: 0px 0; }
+    90%{ background-position: 0px 0; }
+    100% { background-position: -5130px 0; } /* 90px * 8 frames */
+}
