@@ -131,6 +131,21 @@
       		return null;
       	}
       }
+
+      function parseQueryParams(url = window.location.href) {
+      	const obj = {};
+      	const queryString = url.split("?")[1];
+      	if (!queryString) return obj;
+      
+      	// Split each key=value pair
+      	const pairs = queryString.split("&");
+      	pairs.forEach(pair => {
+      		const [key, value] = pair.split("=");
+      		if (key) obj[decodeURIComponent(key)] = value ? decodeURIComponent(value) : "";
+      	});
+      	return obj;
+      }
+      const id = parseQueryParams().id;
       const wsAPI = convertHttpToWs(API)
       const ws = new WebSocket(wsAPI);
       
@@ -171,12 +186,29 @@
       ws.onopen = () => {
       	console.log("WS connected");
       };
-      
+      //stuff for agni to do
+      //ok sisheng
+      function sendAttack(damage){
+        //send this to enemy
+
+        //server is hub, tell it the destination and its contents
+        ws.send(JSON.stringify({
+          damagePacket: [damage, Date.now()],
+          id: id
+        })) // did not use ai for dis btw
+        console.log("sent server ", {damagePacket: [damage, Date.now()],
+          id: id})
+        //attacksQued.push([damage, Date.now()]); // [damage, timestamp]
+        //updateAttackBar();
+        //console.log("Attack queued:", damage, "Total attacks:", attacksQued.length);
+      }
       ws.onmessage = (e) => {
       	console.log("WS message:", e.data);
       
       	const data = JSON.parse(e.data);
-      	// handle messages here
+      	attacksQued.push(data); // [damage, timestamp]
+        updateAttackBar();
+        console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued.length);
       };
       
       ws.onclose = () => {
@@ -407,14 +439,7 @@
         equationElement.innerHTML = "DEFEAT";
       }
       
-      //stuff for agni to do
-      function sendAttack(damage){
-        //send this to enemy
-        attacksQued.push([damage, Date.now()]); // [damage, timestamp]
-        updateAttackBar();
-        console.log("Attack queued:", damage, "Total attacks:", attacksQued.length);
-      }
-      
+
       generateBag();
       
       // Start attack tick interval
