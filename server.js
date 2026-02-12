@@ -508,7 +508,7 @@ wss.on("connection", (ws, req) => {
 	
 	console.log("ws connection");
 	ws.on("message", msg => {
-		
+		msg = JSON.parse(msg) // monosodium glutemate?
 		console.log("through ws: ", msg.toString());
 		if(msg.connectMsg){
 			rooms[msg.id].players.push(new Player(ws, name))
