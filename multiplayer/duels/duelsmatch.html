@@ -119,6 +119,22 @@
     <div class = "attack-bar" id = "attack-bar"></div>
     <div class = "health-bar" id = "health-bar"></div>
     <script>
+
+      function convertHttpToWs(url) {
+      	try {
+      		const parsed = new URL(url);
+      		if (parsed.protocol === "https:") parsed.protocol = "wss:";
+      		else if (parsed.protocol === "http:") parsed.protocol = "ws:";
+      		return parsed.toString();
+      	} catch (e) {
+      		console.error("Invalid URL:", url);
+      		return null;
+      	}
+      }
+      // Example usage
+      const ws_API = convertHttpsToWs(API)
+      const ws = new WebSocket("wss://watch-behalf-automotive-alter.trycloudflare.com");
+      
       let equation = [];
       let currentBag = [];
       let currentEquationsInBag = [];
@@ -153,7 +169,25 @@
       //some controls from localStorage
       let answerQuestion = localStorage.getItem("answer_question");
       let resetGame = localStorage.getItem("reset_game");
+      ws.onopen = () => {
+      	console.log("WS connected");
+      };
       
+      ws.onmessage = (e) => {
+      	console.log("WS message:", e.data);
+      
+      	const data = JSON.parse(e.data);
+      	// handle messages here
+      };
+      
+      ws.onclose = () => {
+      	console.log("WS closed");
+      };
+      
+      ws.onerror = (err) => {
+      	console.log("WS error:", err);
+      };
+
       // Stats functions
       function updateAPS() {
         const elapsed = (Date.now() - startTime) / 1000;
@@ -322,7 +356,6 @@
         }
       }
 
-      // FIXED: Proper attack tick system
       function attackTick(){
         const currentTime = Date.now();
         
