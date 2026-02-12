@@ -492,8 +492,28 @@ app.get("/dump", (req, res) => {
 	console.log("Dump data:", data);
 	res.type("json").send(data);
 });
-
-// Start server
-app.listen(PORT, "0.0.0.0", () => {
-	console.log(`Server running on 0.0.0.0:${PORT}`);
+/** Game Code **/
+const server = app.listen(PORT, "0.0.0.0", () => {
+	console.log("server started");
 });
+
+const { WebSocketServer } = require("ws");
+const wss = new WebSocketServer({ server: server });
+
+wss.on("connection", (ws, req) => {
+	console.log("ws connection");
+
+	ws.on("message", msg => {
+		console.log("through ws: ", msg.toString());
+		//echo
+		// ws.send(JSON.stringify({
+		// 	type: "echo",
+		// 	data: msg.toString()
+		// }));
+	});
+
+	ws.on("close", () => {
+		console.log("ws dis-connection");
+	});
+});
+
