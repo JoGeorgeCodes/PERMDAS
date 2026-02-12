@@ -10,4 +10,4 @@ Made by the BHMS coding club
 
 Supported (not funded) by the BHMS leadership program
 
-Undergoing development, then will attempt to become school event
+Undergoing development, then will attempt to become school eventhi
