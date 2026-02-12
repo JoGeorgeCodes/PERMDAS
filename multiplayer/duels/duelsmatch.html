@@ -185,12 +185,13 @@
       let resetGame = localStorage.getItem("reset_game");
       ws.onopen = () => {
       	console.log("WS connected");
+        ws.send(JSON.stringify({
+          connectMsg: true,
+          id: id,
+          name: localStorage.username
+        }))
       };
-      ws.send(JSON.stringify({
-        connectMsg: true,
-        id: id,
-        name: localStorage.username
-      }))
+
       // did not use ai for dis btw
       //stuff for agni to do
       //ok sisheng
