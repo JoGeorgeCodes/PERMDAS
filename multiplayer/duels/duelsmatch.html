@@ -131,9 +131,8 @@
       		return null;
       	}
       }
-      // Example usage
-      const ws_API = convertHttpToWs(API)
-      const ws = new WebSocket("wss://watch-behalf-automotive-alter.trycloudflare.com");
+      const wsAPI = convertHttpToWs(API)
+      const ws = new WebSocket(wsAPI);
       
       let equation = [];
       let currentBag = [];
