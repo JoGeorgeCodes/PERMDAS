@@ -186,6 +186,12 @@
       ws.onopen = () => {
       	console.log("WS connected");
       };
+      ws.send(JSON.stringify({
+        connectMsg: true,
+        id: id,
+        name: localStorage.username
+      }))
+      // did not use ai for dis btw
       //stuff for agni to do
       //ok sisheng
       function sendAttack(damage){
@@ -193,8 +199,10 @@
 
         //server is hub, tell it the destination and its contents
         ws.send(JSON.stringify({
+          connectMsg:false,
           damagePacket: [damage, Date.now()],
-          id: id
+          id: id,
+          name: localStorage.username
         })) // did not use ai for dis btw
         console.log("sent server ", {damagePacket: [damage, Date.now()],
           id: id})
