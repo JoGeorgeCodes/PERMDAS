@@ -511,7 +511,7 @@ wss.on("connection", (ws, req) => {
 		msg = JSON.parse(msg) // monosodium glutemate?
 		console.log("through ws: ", msg.toString());
 		if(msg.connectMsg){
-			rooms[msg.id].players.push(new Player(ws, name))
+			rooms[msg.id].players.push(new Player(ws, msg.name))
 		}else{
 			var room = rooms[msg.id];
 			//send to other player(s)
