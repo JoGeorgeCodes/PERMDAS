@@ -512,18 +512,20 @@ wss.on("connection", (ws, req) => {
 		console.log("through ws: ", JSON.stringify(msg));
 		if(msg.connectMsg){
 			rooms[msg.id].players.push(new Player(ws, msg.name))
-		}else{
+		}else if(msg.victory){
 			var room = rooms[msg.id];
 			//send to other player(s)
 			var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
 			var randPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
-			randPlayer.theirWS.send(JSON.stringify(msg.damagePacket))
 			
-		//echo
-		// ws.send(JSON.stringify({
-		// 	type: "echo",
-		// 	data: msg.toString()
-		// 
+			randPlayer.theirWS.send(JSON.stringify({victory: true}))
+		}else
+			var room = rooms[msg.id];
+			//send to other player(s)
+			var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
+			var randPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+			
+			randPlayer.theirWS.send(JSON.stringify(msg.damagePacket))
 		}
 	});
 
