@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../../config.js"></script>
     <title>PERMDAS League FT 1</title>
     <style>
       .header{
         text-align: center;
         font-family: "Courier New", Courier, monospace;
-        color: white;4
+        color: white;
         text-shadow: 2px 2px 4px black;
-        font-size: 40px
+        font-size: 40px;
+        opacity: 0;
+        animation: fadeInHeader 0.5s ease 5s forwards;
       }
       .box{
         position: fixed;
@@ -18,7 +19,9 @@
         width: 80%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.7);
-        z-index: -1
+        z-index: -1;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .answer_box{
         display: block;
@@ -31,6 +34,8 @@
         background-color: rgba(255, 255, 255, 0.9);
         border-radius: 10px;
         padding: 10px;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .equation{
         color: white;
@@ -38,6 +43,8 @@
         margin-top: 100px;
         text-align: center;
         font-family: "Courier New", Courier, monospace;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .aps{
         font-size: 20px;
@@ -48,6 +55,8 @@
         color: white;
         text-shadow: 2px 2px 4px black;
         z-index: 10;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .reading-time{
         font-size: 20px;
@@ -58,6 +67,8 @@
         color: white;
         text-shadow: 2px 2px 4px black;
         z-index: 10;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .typing-time{
         font-size: 20px;
@@ -68,6 +79,8 @@
         color: white;
         text-shadow: 2px 2px 4px black;
         z-index: 10;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .attack-bar{
         display: flex;
@@ -82,6 +95,8 @@
         background-color: yellow;
         border-radius: 10px;
         transition: height 0.3s ease;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
       }
       .health-bar{
         display: flex;
@@ -96,6 +111,138 @@
         background-color: red;
         border-radius: 10px;
         transition: height 0.3s ease;
+        opacity: 0;
+        animation: fadeIn 0.5s ease 5s forwards;
+      }
+      .blue-slider{
+        position: absolute;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 55%;
+        background-color: #0066ff;
+        opacity: 0.95;
+        transform: translateY(-100%);
+        animation: slideDownBlue 5s forwards;
+        z-index: 100;
+      }
+      .red-slider{
+        position: absolute;
+        clip-path: polygon(0% 15%, 100% 0%, 100% 100%, 0% 100%);
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 55%;
+        background-color: #ff0033;
+        opacity: 0.95;
+        transform: translateY(100%);
+        animation: slideUpRed 5s forwards;
+        z-index: 100;
+      }
+      .versus-text{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        font-size: 120px;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 4px 4px 8px black, -2px -2px 4px rgba(255,255,255,0.3);
+        font-weight: bold;
+        z-index: 101;
+        animation: versusAppear 5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+      }
+      .your-name{
+        position: fixed;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 120px;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 4px 4px 8px black, -2px -2px 4px rgba(255,255,255,0.3);
+        font-weight: bold;
+        z-index: 101;
+      }
+      .enemy-name{
+        position: fixed;
+        bottom: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 120px;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 4px 4px 8px black, -2px -2px 4px rgba(255,255,255,0.3);
+        font-weight: bold;
+        z-index: 101;
+      }
+      @keyframes slideDownBlue{
+        0% {
+          transform: translateY(-100%);
+        }
+        30% {
+          transform: translateY(0%);
+        }
+        70% {
+          transform: translateY(0%);
+        }
+        100% {
+          transform: translateY(-100%);
+        }
+      }
+      @keyframes slideUpRed{
+        0% {
+          transform: translateY(100%);
+        }
+        30% {
+          transform: translateY(0%);
+        }
+        70% {
+          transform: translateY(0%);
+        }
+        100% {
+          transform: translateY(100%);
+        }
+      }
+      @keyframes versusAppear{
+        0% {
+          transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+          opacity: 0;
+        }
+        30% {
+          transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+          opacity: 1;
+        }
+        40% {
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+        70% {
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0) rotate(180deg);
+          opacity: 0;
+        }
+      }
+      @keyframes fadeIn{
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes fadeInHeader{
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       body{
         background-image: url("https://media.posterstore.com/site_images/685ddd908b7ca77dcb8af940_1207156463_PS50626-4.jpg");
@@ -105,10 +252,18 @@
         background-attachment: fixed;
         margin: 0;
         padding: 0;
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
+    <div class = "blue-slider">
+        <p class="your-name">?</p>
+    </div>
+    <div class = "red-slider">
+        <p class="enemy-name">!</p>
+    </div>
+    <div class = "versus-text">VS</div>
     <div class = "box"></div>
     <h1 class = "header">PERMDAS LEAGUE FT 5</h1>
     <p class = "equation" id = "equation">Loading...</p>
@@ -192,9 +347,6 @@
         }))
       };
 
-      // did not use ai for dis btw
-      //stuff for agni to do
-      //ok sisheng
       function sendAttack(damage){
         //send this to enemy
 
