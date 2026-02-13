@@ -449,7 +449,8 @@
         equationElement.innerHTML = "DEFEAT";
         ws.send(JSON.stringify({
           connectMsg:false,
-          victory: true
+          victory: true,
+          id: id
         })) // did not use ai for dis btw
       }
       function victory() {
