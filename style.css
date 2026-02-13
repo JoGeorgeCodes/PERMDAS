@@ -185,3 +185,25 @@
     50%{ background-position: 0px 0; }
     100% { background-position: -4500px 0; } /* 90px * 50 frames */
 }
+
+.zero_int_animation{
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    width: 90px;
+    height: 90px;
+    background: transparent url('badges/0_int.png') 0 0 no-repeat;
+    background-size: 3690px 90px; /* 90px * 41 frames */
+    animation: run_zero_int 5s steps(41) infinite;
+
+}
+
+@keyframes run_zero_int {
+    0% { background-position: 0px 0; }
+    57%{ background-position: 0px 0; }
+    100% { background-position: -3690px 0; } /* 90px * 41 frames */
+}
+
+
