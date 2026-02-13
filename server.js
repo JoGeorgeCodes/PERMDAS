@@ -517,7 +517,7 @@ wss.on("connection", (ws, req) => {
 			//send to other player(s)
 			var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
 			var randPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
-			randPlayer.theirWS.send(msg.damagePacket)
+			randPlayer.theirWS.send(JSON.stringify(msg.damagePacket))
 			
 		//echo
 		// ws.send(JSON.stringify({
