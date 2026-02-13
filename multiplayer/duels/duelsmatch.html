@@ -215,6 +215,7 @@
       	console.log("WS message:", e.data);
       
       	const data = JSON.parse(e.data);
+        if(data.victory) victory();
       	attacksQued.push(data); // [damage, timestamp]
         updateAttackBar();
         console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued.length);
@@ -446,6 +447,17 @@
         paused = true;
         answerBox.disabled = true;
         equationElement.innerHTML = "DEFEAT";
+        ws.send(JSON.stringify({
+          connectMsg:false,
+          victory: true
+        })) // did not use ai for dis btw
+      }
+      function victory() {
+        clearInterval(timerInterval);
+        clearInterval(attackInterval);
+        paused = true;
+        answerBox.disabled = true;
+        equationElement.innerHTML = "VICTORY";
       }
       
 
@@ -485,7 +497,6 @@
               generateBag();
             }
             
-            // FIXED: Proper attack logic
             let attackValue = findAttack();
             
             if(attacksQued.length > 0){
