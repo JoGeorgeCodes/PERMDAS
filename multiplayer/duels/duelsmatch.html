@@ -303,8 +303,8 @@
       var id = parseQueryParams().id;
       var other = parseQueryParams().other;
       
-      document.getElementById("your-name").value = localStorage.username;
-      document.getElementById("other-name").value = other;
+      document.getElementById("your-name").innerHTML = localStorage.username;
+      document.getElementById("other-name").innerHTML = other;
       
       const wsAPI = convertHttpToWs(API)
       const ws = new WebSocket(wsAPI);
