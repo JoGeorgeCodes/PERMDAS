@@ -109,11 +109,13 @@ app.post("/enter-matchmaking", (req, res) => {
 		
 		res.json({
 			success: true,
-			id: room.id
+			id: room.id,
+			other: other.name
 		});
 		other.res.json({
 			success: true,
-			id: room.id
+			id: room.id,
+			other: name
 		});
 	}else{
 		peopleInMatchmaking.push({
@@ -513,6 +515,7 @@ wss.on("connection", (ws, req) => {
 		console.log("through ws: ", JSON.stringify(msg));
 		if(msg.connectMsg){
 			rooms[msg.id].players.push(new Player(ws, msg.name))
+			
 		}else if(msg.victory){
 			var room = rooms[msg.id];
 			//send to other player(s)
