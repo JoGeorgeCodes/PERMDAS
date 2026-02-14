@@ -122,7 +122,7 @@
       
               if (data.success && data.id) {
                 // redirect to game with room id
-                location.href = "/PERMDAS/multiplayer/duels/duelsmatch?id=" + data.id + "&other="+date.name;
+                location.href = "/PERMDAS/multiplayer/duels/duelsmatch?id=" + data.id + "&other="+data.name;
 
               } else if (data.waiting) {
                   queButton.textContent = "Waiting for opponent...";
