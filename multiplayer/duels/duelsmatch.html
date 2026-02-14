@@ -259,10 +259,10 @@
   </head>
   <body>
     <div class = "blue-slider">
-        <p class="your-name">?</p>
+        <p class="your-name" id = "your-name">?</p>
     </div>
     <div class = "red-slider">
-        <p class="enemy-name">!</p>
+        <p class="enemy-name" id = "other-name">!</p>
     </div>
     <div class = "versus-text">VS</div>
     <div class = "box"></div>
@@ -275,7 +275,6 @@
     <div class = "attack-bar" id = "attack-bar"></div>
     <div class = "health-bar" id = "health-bar"></div>
     <script>
-
       function convertHttpToWs(url) {
       	try {
       		const parsed = new URL(url);
@@ -301,7 +300,12 @@
       	});
       	return obj;
       }
-      const id = parseQueryParams().id;
+      var id = parseQueryParams().id;
+      var other = parseQueryParams().other;
+      
+      document.getElementByID("your-name").value = localStorage.username;
+      document.getElementByID("other-name").value = other;
+      
       const wsAPI = convertHttpToWs(API)
       const ws = new WebSocket(wsAPI);
       
