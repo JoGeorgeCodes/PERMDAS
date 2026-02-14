@@ -567,7 +567,7 @@
             attacksQued.splice(i, 1); // Remove this attack
             updateAttackBar();
             updateHealthBar();
-            console.log("Attack hit! Health:", health, "Remaining attacks:", attacksQued.length);
+            // console.log("Attack hit! Health:", health, "Remaining attacks:", attacksQued.length);
             
             // Check for game over
             if(health <= 0){
@@ -615,7 +615,7 @@
         clearInterval(attackInterval);
         paused = true;
         answerBox.disabled = true;
-        equationElement.innerHTML = "VICTORY";
+        //equationElement.innerHTML = "VICTORY";
       }
       
 
