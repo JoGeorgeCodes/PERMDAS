@@ -512,7 +512,7 @@ wss.on("connection", (ws, req) => {
 	console.log("ws connection");
 	ws.on("message", msg => {
 		msg = JSON.parse(msg) // monosodium glutemate?
-		console.log("through ws: ", JSON.stringify(msg), "/n rooms:", JSON.stringify(rooms));
+		console.log("through ws: ", JSON.stringify(msg), "/n rooms:", rooms);
 		if(msg.connectMsg){
 			if(rooms[msg.id]){
 				rooms[msg.id].players.push(new Player(ws, msg.name))
