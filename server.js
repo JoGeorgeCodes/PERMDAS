@@ -514,8 +514,11 @@ wss.on("connection", (ws, req) => {
 		msg = JSON.parse(msg) // monosodium glutemate?
 		console.log("through ws: ", JSON.stringify(msg), "/n rooms:", JSON.stringify(rooms));
 		if(msg.connectMsg){
-			rooms[msg.id].players.push(new Player(ws, msg.name))
-			
+			if(rooms[msg.id]){
+				rooms[msg.id].players.push(new Player(ws, msg.name))
+			}else{
+				ws.send("This is a old and deleted room");
+			}
 		}else if(msg.victory){
 			var room = rooms[msg.id];
 			//send to other player(s)
