@@ -3,6 +3,8 @@
   <head>
     <script src="config.js"></script>
     <title>Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <style>
       .header{
         font-family: "Courier New", Courier, monospace;
@@ -123,8 +125,8 @@
     <div class="container">
       <h2 class="gamemode-title">40 Equation Sprint</h2>
       <div id="leaderboard-sprint" class="list">Loading...</div>
+   
     </div>
-    
     <!-- Blitz Leaderboard -->
     <div class="container">
       <h2 class="gamemode-title">Blitz</h2>
@@ -144,6 +146,7 @@
       const sprintBest = parseFloat(localStorage.getItem("bestTime"));
       const blitzBest = parseFloat(localStorage.getItem("bestScore"));
       const username = localStorage.getItem("username");
+
       
       console.log("DEBUG: Sprint Best:", sprintBest);
       console.log("DEBUG: Blitz Best:", blitzBest);
@@ -288,6 +291,7 @@
       function displayLeaderboard(data, containerId, scoreLabel) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
+         
         
         if (data.length === 0) {
           container.innerHTML = '<p style="color: white; text-shadow: 2px 2px 4px black;">No scores yet. Be the first!</p>';
@@ -300,20 +304,37 @@
         // Add each player as a ranking div
         data.forEach((item, index) => {
           const ranking = document.createElement("div");
+          const li = document.createElement("li");
           ranking.className = "ranking";
           
           // Add medal image for top 3
           let medalImg = '';
           if (index === 0) {
-            medalImg = '<img src="medals/gold.png" class="medal-img" alt="Gold Medal">';
+            
+            const badge = document.createElement("div");
+            badge.classList.add("goldmedal_animation");
+            li.appendChild(badge);
+
           } else if (index === 1) {
-            medalImg = '<img src="medals/silver.png" class="medal-img" alt="Silver Medal">';
+            const badge2 = document.createElement("div");
+            badge2.classList.add("silvermedal_animation");
+            li.appendChild(badge2);
           } else if (index === 2) {
-            medalImg = '<img src="medals/bronze.png" class="medal-img" alt="Bronze Medal">';
+
+            const img = document.createElement("img");
+            const badge3 = document.createElement("div");
+            badge3.classList.add("bronzemedal_animation");
+            li.appendChild(badge3);
+            
           }
           
-          ranking.innerHTML = `<li>${medalImg}<span>${item.name} - ${item.score} ${scoreLabel}</span></li>`;
+          const span = document.createElement("span");
+          span.textContent = `${item.name} - ${item.score} ${scoreLabel}`;
+          li.appendChild(span);
+
+          ranking.appendChild(li);
           ol.appendChild(ranking);
+
         });
         
         container.appendChild(ol);
