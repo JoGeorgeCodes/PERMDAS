@@ -526,6 +526,8 @@ wss.on("connection", (ws, req) => {
 			var randPlayer = otherPlayers[0]//[Math.floor(Math.random() * otherPlayers.length)];
 			
 			randPlayer.theirWS.send(JSON.stringify({victory: true}))
+
+			delete rooms[msg.id];
 		}else{
 			var room = rooms[msg.id];
 			//send to other player(s)
