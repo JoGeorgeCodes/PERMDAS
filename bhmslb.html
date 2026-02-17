@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHMS 2026 Leaderboard</title>
+    <style>
+      /*styling stuff*/
+        .header{
+            color: rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px black;
+            text-align: center;
+            font-size: 50px;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .text{
+            color: rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px black;
+            text-align: center;
+            font-size: 30px;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        body{
+          background-image: url("https://images.unsplash.com/photo-1483347756197-71ef80e95f73?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm9ydGhlcm4lMjBsaWdodHN8ZW58MHx8MHx8fDA%3D");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+        }
+
+       #bracket {
+          display: flex;
+          align-items: flex-start;
+          gap: 20px;
+          overflow-x: auto;
+          padding: 60px;
+
+        }
+
+        .round {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          color:rgb(255, 255, 255);
+          text-shadow: black 2px 2px 4px;
+          font-family: "Courier New", monospace;
+          text-align: center;
+          size: 40px;
+
+        }
+
+        .match {
+          background: rgba(0,0,0,0.6);
+          padding: 5px 10px;
+          border-radius: 8px;
+          color: rgb(213, 245, 255);
+          font-family: "Courier New", monospace;
+          text-align: center;
+        }
+
+        .back{
+        backdrop-filter: blur(10px);
+        padding: 15px 50px 15px 80px;
+        clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 0% 100%);
+        position: absolute;
+        color: red;
+        background-color:rgba(0, 0, 0, 0.3);
+        top: 0px;
+        left: -50px;
+        font-size: 30px;
+        border: none; 
+        cursor: pointer;
+        font-family: "Courier New", Courier, monospace;
+        transition: all 0.3s ease;
+      }
+      .back:hover{
+        transform: translateX(50px)
+      }
+
+
+    </style>
+</head>
+<body>
+
+
+    <h1>/</h1>
+    <h1 class = "header" id = "header">BHMS 2026 Leaderboard</h1>
+      <a href = "bhms.html"><button class = "back">Back</button></a>
+
+    <div id = bracket></div>
+    <script>
+
+      /*function to check for even numbers*/
+      function isEven(number) {
+        return number % 2 === 0;
+      }
+
+      function getMatches(players){
+        let matches = [];
+        for(let i = 0; i < players.length; i+=2){
+          if(players[i] != ";" && players[i+1] != ";"){
+            matches.push([players[i], players[i+1]]);
+          }
+        }
+        return matches;
+      }
+
+      /*setting up lists*/
+      playersList = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6", "Player 7", "Player 8", "Player 9", "Player 10", "Player 11", "Player 12", "Player 13", "Player 14", "Player 15", "Player 16", "Player 17", "Player 18", "Player 19", "Player 20", "Player 21", "Player 22", "Player 23", "Player 24", "Player 25", "Player 26", "Player 27", "Player 28", "Player 29", "Player 30", "Player 31", "Player 32", ";", ";","Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6", "Player 7", "Player 8", "Player 9", "Player 10", "Player 11", "Player 12", "Player 13", "Player 14", "Player 15", "Player 16", ";", ";", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6", "Player 7", "Player 8", ";", ";", "Player 1", "Player 2", "Player 3", "Player 4", ";", ";", "Player 1", "Player 2", ";", ";", "Player 1", ";", ";"];
+
+      let rounds = 0;
+
+      for (let i = 0; i < playersList.length; i++){
+        if (playersList[i] == ";" && playersList[i+1] == ";"){
+          rounds++;
+        }
+      }
+
+      let a = 0
+
+      let winner = "";
+
+      const matches = getMatches(playersList);
+      const bracket = document.getElementById("bracket");
+      const round = document.createElement("div");
+
+      console.log(matches);
+      console.log(rounds);
+
+      for (let k = 0 ; k < rounds; k++){
+
+        const round = document.createElement("div");
+        round.textContent = "Round " + (k+1);
+        round.classList.add("round");
+        i = a;
+        while (playersList[i] != ";" && i < playersList.length){
+          const match = document.createElement("div");
+          match.classList.add("match");
+          if (playersList[i+1] == ";" && playersList[i+2] == ";" ){
+            if(playersList[i-1] == ";"){
+              match.textContent = playersList[i] + " has won!";
+              winner = playersList[i];
+            } else {
+              match.textContent = playersList[i] + " has a bye!";
+            }
+          } else {
+            match.textContent = playersList[i] + " vs " + playersList[i+1];
+          }
+          round.appendChild(match);
+          i+=2;
+        }
+        bracket.appendChild(round);
+        a = i+2;
+      }
+
+    </script>
+</body>
+</html>
