@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHMS 2026 Competion</title>
+    <style>
+        .header{
+        color: rgb(255, 255, 255);
+        text-shadow: 2px 2px 4px black;
+        text-align: center;
+        font-size: 50px;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .text{
+        text-align: center;
+        font-size: 30px;
+        text-shadow: 2px 2px 2px rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      .text2{
+        text-align: center;
+        font-size: 20px;
+        text-shadow: 2px 2px 2px rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      .leaderboard{
+        background-color: rgb(184, 230, 248);
+      }
+
+      .compete{
+        background-color: rgb(227, 151, 255);
+      }
+
+      #scene-button{
+        text-align: left;
+        font-family: "Courier New", Courier, monospace;
+        clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
+        display: block;
+        margin: 10px 5%;
+        transform: translateX(250px);
+        padding: 30px 100% 30px 500px; /* top, right, bottom, left */
+        font-size: 30px;
+        color: rgb(0, 0, 0);
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      #scene-button:hover{
+        transform: translateX(100px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      body{
+        background-image: url("https://www.pariaoutdoorproducts.com/cdn/shop/articles/Rae_Lakes_Loop_dcbaf497-4e73-486d-9da5-7a14e8ed1846.jpg?v=1749910311");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+
+      .back{
+        backdrop-filter: blur(10px);
+        padding: 15px 50px 15px 80px;
+        clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 0% 100%);
+        position: absolute;
+        color: red;
+        background-color:rgba(0, 0, 0, 0.3);
+        top: 0px;
+        left: -50px;
+        font-size: 30px;
+        border: none; 
+        cursor: pointer;
+        font-family: "Courier New", Courier, monospace;
+        transition: all 0.3s ease;
+      }
+      .back:hover{
+        transform: translateX(50px)
+      }
+
+
+    </style>
+</head>
+<body>
+    <h1>/</h1>
+    <h1 class = "header" id = "header">BHMS 2026 Competition</h1>
+    <a href = "home.html"><button class = "back">Back</button></a>
+    <p class = "text2"> Click Leaderboard to see where you stand. Click Compete to start competing against others!</p>
+    <button class = "leaderboard" id = "scene-button" onclick="window.location.href='bhmslb.html'">Leaderboard</button>
+    <button class = "compete" id = "scene-button" onclick="window.location.href='multiplayer.html'">Compete</button>
+
+
+</body>
+</html>
