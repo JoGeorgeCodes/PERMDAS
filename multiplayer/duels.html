@@ -100,7 +100,7 @@
     </div>
     <button class = "que" id = "que">Enter Matchmaking</button>
     <script>
-      // Reset UI when navigating back via browser buttons
+      // this is some fix to prevent the BfCache to override the Enter Matchmaking buttons.
       window.addEventListener("pageshow", (event) => {
           // persisted is true if the page was loaded from the Bfcache
           if (event.persisted) {
