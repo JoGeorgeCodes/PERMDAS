@@ -558,7 +558,11 @@ wss.on("connection", (ws, req) => {
 			delete rooms[msg.id];
 		}else{
 			var room = rooms[msg.id];
-			//send to other player(s)
+			
+		    if (!room) {
+		        console.log("Room already deleted or doesn't exist.");
+		        return; 
+		    }
 			var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
 			var randPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
 			
