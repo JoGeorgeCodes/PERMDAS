@@ -275,6 +275,7 @@
     <div class = "attack-bar" id = "attack-bar"></div>
     <div class = "health-bar" id = "health-bar"></div>
     <script>
+      let paused = true; // Change this from false to true
       function convertHttpToWs(url) {
       	try {
       		const parsed = new URL(url);
