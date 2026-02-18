@@ -528,6 +528,13 @@ wss.on("connection", (ws, req) => {
 				
 				        if (count === 0) {
 				            clearInterval(countdownInterval);
+							setTimeout(() => {
+								rooms[msg.id].players.forEach(player => {
+				        			if (player.theirWS.readyState === 1) {
+				            		    player.theirWS.send(JSON.stringify({ type: 'countdown', value: "start" }));
+				            		}
+				        		});
+							}, 1000)
 				        }
 				        
 				        count--;
