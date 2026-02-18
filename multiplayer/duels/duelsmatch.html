@@ -370,8 +370,19 @@
       }
       ws.onmessage = (e) => {
       	console.log("WS message:", e.data);
-        if(e.type == "countdown")
-          equationElement.value = e.value;
+
+        // Handle Countdown
+        if (data.type === "countdown") {
+            paused = true; // Keep game paused during countdown
+            equationElement.innerHTML = data.value;
+            if (data.value === 0 || data.value === "GO!") {
+                paused = false;
+                equationElement.innerHTML = "GO!";
+                // Reset phase tracking to start fresh on the first problem
+                phaseStartTime = Date.now();
+            }
+            return; // Don't process as an attack
+        }
       	const data = JSON.parse(e.data);
         if(data.victory) victory();
       	attacksQued.push(data); // [damage, timestamp]
