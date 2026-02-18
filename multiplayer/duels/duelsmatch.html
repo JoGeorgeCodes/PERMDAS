@@ -376,7 +376,6 @@
         if (data.type === "countdown") {
             paused = true;
             if (data.value === 0) {
-                paused = false;
                 equationElement.innerHTML = "GO!";
                 phaseStartTime = Date.now();
             } else if (data.value === "start") {
