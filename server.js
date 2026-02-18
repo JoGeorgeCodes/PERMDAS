@@ -521,8 +521,8 @@ wss.on("connection", (ws, req) => {
 				
 				    const countdownInterval = setInterval(() => {
 				        rooms[msg.id].players.forEach(player => {
-				            if (player.ws.readyState === 1) {
-				                player.ws.send(JSON.stringify({ type: 'countdown', value: count }));
+				            if (player.theirWS.readyState === 1) {
+				                player.theirWS.send(JSON.stringify({ type: 'countdown', value: count }));
 				            }
 				        });
 				
