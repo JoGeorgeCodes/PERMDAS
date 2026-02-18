@@ -18,20 +18,24 @@ const stats = {
 
 	unlockedAchievements: localStorage.unlockedAchievements
 };
-
 fetch(API + "/setStats", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(stats)
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(stats)
 })
 .then(res => res.json())
 .then(data => {
-  if(data.success == true){
-    alert("Sucess, overriding own stats")
-	for(i in stats){
-		localStorage[i] = stats[i];
-	}
-  }else{
-    alert("Something Went Wrong")
-  }
+    if (data.success) {
+        console.log("Stats synced with server.");
+        // Use the server's version of the data to update local storage
+        const updated = data.currentStats;
+        for (let key in updated) {
+            localStorage[key] = typeof updated[key] === 'object' 
+                ? JSON.stringify(updated[key]) 
+                : updated[key];
+        }
+    } else {
+        alert("Sync failed: " + data.message);
+    }
 })
+.catch(err => console.error("Network error:", err));
