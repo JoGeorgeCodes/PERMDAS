@@ -391,7 +391,7 @@
         if(data.victory) victory();
       	attacksQued.push(data); // [damage, timestamp]
         updateAttackBar();
-        console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued.length);
+        console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued?.length);
       };
       
       ws.onclose = () => {
