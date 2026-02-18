@@ -637,10 +637,13 @@
       const attackInterval = setInterval(attackTick, 100); // Check every 100ms
       
        //loop
-      setInterval(() =>{
-        if(paused)return;
-        equationElement.textContent = displayEquation();
-      }, 100)
+      setInterval(() => {
+          // ONLY display the equation if the game is NOT paused
+          // This allows the countdown text to stay on screen
+          if (!paused) {
+              equationElement.textContent = displayEquation();
+          }
+      }, 100);
       
       //solving equation
       answerBox.addEventListener("keyup", (event) =>{
