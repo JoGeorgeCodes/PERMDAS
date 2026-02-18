@@ -27,8 +27,10 @@ fetch(API + "/setStats", {
 .then(res => res.json())
 .then(data => {
   if(data.success == true){
-    alert("Sucess")
-    localStorage.passwordHash = newPasswordHash
+    alert("Sucess, overriding own stats")
+	for(i in stats){
+		localStorage[i] = stats[i];
+	}
   }else{
     alert("Something Went Wrong")
   }
