@@ -516,6 +516,24 @@ wss.on("connection", (ws, req) => {
 		if(msg.connectMsg){
 			if(rooms[msg.id]){
 				rooms[msg.id].players.push(new Player(ws, msg.name))
+				setTimeout(() => {
+				    let count = 3;
+				
+				    const countdownInterval = setInterval(() => {
+				        room.players.forEach(player => {
+				            if (player.ws.readyState === 1) {
+				                player.ws.send(JSON.stringify({ type: 'countdown', value: count }));
+				            }
+				        });
+				
+				        if (count === 0) {
+				            clearInterval(countdownInterval);
+				        }
+				        
+				        count--;
+				    }, 1000);
+				
+				}, 5000);	
 			}else{
 				ws.send("This is a old and deleted room");
 			}
