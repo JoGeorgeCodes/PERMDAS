@@ -623,7 +623,8 @@
         ws.send(JSON.stringify({
           connectMsg:false,
           victory: true,
-          id: id
+          id: id,
+          name: localStorage.username
         })) // did not use ai for dis btw
       }
       function victory() {
