@@ -369,21 +369,21 @@
         //console.log("Attack queued:", damage, "Total attacks:", attacksQued.length);
       }
       ws.onmessage = (e) => {
+        
+      	const data = JSON.parse(e.data);
       	console.log("WS message:", e.data);
 
         // Handle Countdown
         if (data.type === "countdown") {
-            paused = true; // Keep game paused during countdown
+            paused = true;
             equationElement.innerHTML = data.value;
-            if (data.value === 0 || data.value === "GO!") {
+            if (data.value === 0) {
                 paused = false;
                 equationElement.innerHTML = "GO!";
-                // Reset phase tracking to start fresh on the first problem
                 phaseStartTime = Date.now();
             }
-            return; // Don't process as an attack
+            return;
         }
-      	const data = JSON.parse(e.data);
         if(data.victory) victory();
       	attacksQued.push(data); // [damage, timestamp]
         updateAttackBar();
