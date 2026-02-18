@@ -372,15 +372,20 @@
         
       	const data = JSON.parse(e.data);
       	console.log("WS message:", e.data);
-
-        // Handle Countdown
+        
         if (data.type === "countdown") {
             paused = true;
-            equationElement.innerHTML = data.value;
             if (data.value === 0) {
                 paused = false;
                 equationElement.innerHTML = "GO!";
                 phaseStartTime = Date.now();
+            } else if (data.value === "start") {
+              paused = false;
+              phaseStartTime = Date.now();
+              
+              equationElement.textContent = displayEquation();
+            } else {
+                equationElement.innerHTML = data.value;
             }
             return;
         }
