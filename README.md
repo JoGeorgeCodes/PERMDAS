@@ -6,10 +6,10 @@ Most people suck at math, including the developer
 
 This was made to study, focusing on fixing small mistakes
 
-This is the 3rd attempt to create such a program, the first two were on p5js KA
-
 Made by the BHMS coding club
 
 Supported (not funded) by the BHMS leadership program
 
-Undergoing development, then will attempt to become school eventhi
+Undergoing development, then will attempt to become school event <-Agni said hi
+
+Third time's the charm...
