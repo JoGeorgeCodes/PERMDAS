@@ -1,4 +1,4 @@
-var API = "https://exclusive-olympics-thomas-wanting.trycloudflare.com";//URGENT MAKE SURE TO REMOVE SLASH AT END
+var API = "https://cordless-epic-commissioner-outline.trycloudflare.com";//URGENT MAKE SURE TO REMOVE SLASH AT END
 
 //of course the programmer forgot
 if (API.endsWith('/')) {
