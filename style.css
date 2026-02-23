@@ -21,7 +21,7 @@
     height: 90px;
     background: url('medals/goldmedal.png') 0 0 no-repeat;
     background-size: 990px 90px; /* 11 × 90 */
-    animation: run_goldmedal 3s steps(11) infinite;
+    animation: run_goldmedal 3s steps(20) infinite;
 }
 
 
