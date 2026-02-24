@@ -3,6 +3,33 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 
+//YAY
+async function generate(prompt, version = 1) {
+	const models = {
+		1: "qwen2.5:3b",
+		2: "qwen2.5-coder:7b",
+		3: "qwen2.5-coder:14b",
+		4: "qwen2.5-coder:32b"
+	};
+
+	const model = models[version] || models[1];
+
+	const response = await fetch("http://localhost:11434/api/generate", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			model: model,
+			prompt: prompt,
+			stream: false
+		})
+	});
+
+	const data = await response.json();
+	return data.response;
+}
+
+
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
