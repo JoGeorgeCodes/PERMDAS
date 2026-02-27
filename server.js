@@ -485,8 +485,13 @@ app.post("/setStats", (req, res) => {
 
 	// well oc i used ai for these long strings of text, but i typud all the ifs and non repetetive stuff
 	const user = users[username];
-	if (Math.min(...user.scores) == user.bestScore) {
+	if (Math.min(...user.scores) == bestTime) {
 		user.bestTime = bestTime;
+		res.json({
+			success: true,
+			trueBestScore: bestScore
+		});
+	} if (Math.min(...user.scores) < bestScore) {
 		res.json({
 			success: true,
 			trueBestScore: bestScore
