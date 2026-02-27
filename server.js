@@ -491,9 +491,9 @@ app.post("/setStats", (req, res) => {
 			success: true,
 			trueBestScore: bestScore
 		});
-	} else if (Math.min(...user.scores) > user.bestScore) {
+	} else if (Math.min(...user.scores) > bestScore) {
 		//they have a better best score, so add that time and then send back theri bestScore
-		user.scores.push(user.bestScore);
+		user.scores.push(bestScore);
 	}
 	user.totalGames = totalGames;
 	user.totalEquations = totalEquations;
