@@ -493,7 +493,7 @@ app.post("/setStats", (req, res) => {
 		});
 	} else if (Math.min(...user.scores) > user.bestScore) {
 		//they have a better best score, so add that time and then send back theri bestScore
-		user.scores
+		user.scores.push(user.bestScore);
 	}
 	user.totalGames = totalGames;
 	user.totalEquations = totalEquations;
