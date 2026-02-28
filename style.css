@@ -17,8 +17,8 @@
 .goldmedal_animation {
     position: relative;
     inset: 0;
-    width: 90px;
-    height: 90px;
+    width: 40px;
+    height: 40px;
     background: url('medals/goldmedal.png') 0 0 no-repeat;
     background-size: 800px 40px;
     animation: run_goldmedal 3s steps(20) infinite;
