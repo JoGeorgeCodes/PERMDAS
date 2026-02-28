@@ -320,7 +320,7 @@
       let comboMultiplier = 1;
       let health = 40;
       let paused = true;
-      let attackDelay = 5000; // 5 seconds in milliseconds
+      let attackDelay = 3000; // 5 seconds in milliseconds
       
       // Stats tracking variables
       let equationsCompleted = 0;
@@ -342,7 +342,10 @@
 
       //some controls from localStorage
       let answerQuestion = localStorage.getItem("answer_question");
+
+      //lol why is this here
       let resetGame = localStorage.getItem("reset_game");
+      
       ws.onopen = () => {
       	console.log("WS connected");
         ws.send(JSON.stringify({
@@ -632,7 +635,8 @@
         clearInterval(attackInterval);
         paused = true;
         answerBox.disabled = true;
-        equationElement.innerHTML = "VICTORY";
+        // I sure do hope this works
+        window.location.replace('cunfuzed.github.io/PERMDAS/duels/duelsend');
       }
       
 
