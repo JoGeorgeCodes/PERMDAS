@@ -17,18 +17,18 @@
 .goldmedal_animation {
     position: relative;
     inset: 0;
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     background: url('medals/goldmedal.png') 0 0 no-repeat;
-    background-size: 800px 40px;
+    background-size: 1600px 80px;
     animation: run_goldmedal 3s steps(20) infinite;
 }
 
 
 @keyframes run_goldmedal {
     0% { background-position: 0px 0; }
-    90%{ background-position: 0px 0; }
-    100% { background-position: -800px 0; }
+    70%{ background-position: 0px 0; }
+    100% { background-position: -1600px 0; }
 }
 
 /* Bronze Medal Animation */
@@ -46,7 +46,7 @@
 
 @keyframes run_bronzemedal {
     0% { background-position: 0px 0; }
-    90%{ background-position: 0px 0; }
+    80%{ background-position: 0px 0; }
     100% { background-position: -880px 0; }
 }
 
