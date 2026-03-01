@@ -44,6 +44,7 @@
       .score-box{
         width: 25vw;
         height: 30vh;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -53,14 +54,14 @@
         font-family: "Courier New", Courier, monospace;
         color: white;
         margin: 0;
-        animation: glow 3s infinite alternate;
+        animation: glow 1s infinite alternate;
       }
       .score-display-red{
         font-size: 150px;
         font-family: "Courier New", Courier, monospace;
         color: white;
         margin: 0;
-        animation: glow 3s infinite alternate;
+        animation: glow 1s infinite alternate;
       }
       .ending-display{
         position: absolute;
@@ -73,6 +74,8 @@
         color: yellow;
         font-family: 'Courier New', Courier, monospace;
       }
+
+      /* chat! */
       .chat-panel{
         position: fixed;
         bottom: 20px;
@@ -173,6 +176,44 @@
         color: white;
       }
 
+      /*sparks ig*/
+      .spark {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: radial-gradient(circle, white 0%, gold 40%, orange 70%, transparent 100%);
+        box-shadow:
+          0 0 6px gold,
+          0 0 12px orange,
+          0 0 20px rgba(255,165,0,0.6);
+      }
+      .spark-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 999;
+      }
+
+      @keyframes float-up {
+        0% {
+          opacity: 0;
+          transform: translate(var(--x), var(--y)) scale(0.6);
+        }
+        10% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform:
+            translate(
+              calc(var(--x) + var(--drift)),
+              calc(var(--y) - var(--rise))
+            )
+            scale(1.2);
+        }
+      }
       @keyframes victory{
         0%{
           transform: translate(-50%, -50%) scale(7);
@@ -202,12 +243,9 @@
       }
       @keyframes glow{
         0%{ text-shadow: 0 0 5px white; }
-        100%{ text-shadow: 0 0 50px white; }
+        100%{ text-shadow: 0 0 20px white; }
       }
-      @keyframes fadeIn{
-        0%{ opacity: 0; }
-        100%{ opacity: 1;}
-      }
+      
       body{
         background-color: rgb(10,10,10);
         margin: 0;
@@ -217,9 +255,9 @@
     </style>
   </head>
   <body>
+    <div class="spark-container"></div>
     <div id="main-content" style="opacity: 0; pointer-events: none; transition: opacity 1s ease;">
-      <img src="https://img.freepik.com/premium-vector/gold-laurel-wreath-symbol-victory-triumph-vintage-sign-respect-vector-illustration_266660-254.jpg"style="position: absolute; top: 0%; left: 50%; transform: translateX(-50%); width: auto; height: auto; z-index: -1;">
-  
+      <img src="graphics/wreath.png" style="position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 35%; height: auto;opacity: 0.5; z-index: -1;">
       <a href="../duels.html"><button class="back">Back</button></a>
       <h1 class="header">FINAL STANDINGS:</h1>
   
@@ -252,6 +290,30 @@
 
     <p class="ending-display" id="ending-display">hold up...</p>
     <script>
+      //some sparks testing
+      function createSpark(x, y) {
+        const spark = document.createElement("span");
+        spark.classList.add("spark");
+
+        const rise = 80 + Math.random() * 6000;      // how high
+        const drift = (Math.random() - 0.5) * 40;  // sideways wobble
+
+        spark.style.setProperty("--x", x + "px");
+        spark.style.setProperty("--y", y + "px");
+        spark.style.setProperty("--rise", rise + "px");
+        spark.style.setProperty("--drift", drift + "px");
+        spark.style.animation = `float-up ${1.5 + Math.random() * 10}s ease-out forwards`
+
+        document.querySelector(".spark-container").append(spark);
+
+        spark.addEventListener("animationend", () => spark.remove());
+      }
+      setInterval(() => {
+        createSpark(
+          Math.random() * window.innerWidth,
+          window.innerHeight
+        );
+      }, 5);
       
       const blueScore = document.getElementById("blue-score");
       const redScore  = document.getElementById("red-score");
