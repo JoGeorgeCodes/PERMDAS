@@ -531,7 +531,7 @@ app.get("/dump", (req, res) => {
 	console.log("Dump data:", data);
 	res.type("json").send(data);
 });
-/** Game Code **/
+/** Multiplayer duels code **/
 const server = app.listen(PORT, "0.0.0.0", () => {
 	console.log("server started");
 });
