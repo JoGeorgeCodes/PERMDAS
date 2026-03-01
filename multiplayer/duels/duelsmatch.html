@@ -629,6 +629,9 @@
           id: id,
           name: localStorage.username
         })) // did not use ai for dis btw
+        
+        location.href = "/PERMDAS/multiplayer/duels/duelsend?id="+id+"&other="+other+"&win=false"; //you suck, how could you lose!!!
+        
       }
       function victory() {
         clearInterval(timerInterval);
