@@ -141,6 +141,21 @@
         animation: slideUpRed 5s forwards;
         z-index: 100;
       }
+      .score-slider{
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        z-index: 1
+      }
+      .score-text{
+        position: absolute;
+        font-size: 120px;
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        text-shadow: 4px 4px 8px black, -2px -2px 4px rgba(255,255,255,0.3);
+        font-weight: bold;
+        z-index: 2;
+      }
       .versus-text{
         position: fixed;
         top: 50%;
@@ -177,6 +192,43 @@
         text-shadow: 4px 4px 8px black, -2px -2px 4px rgba(255,255,255,0.3);
         font-weight: bold;
         z-index: 101;
+      }
+      .spark {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: radial-gradient(circle, white 0%, gold 40%, orange 70%, transparent 100%);
+        box-shadow:
+          0 0 6px gold,
+          0 0 12px orange,
+          0 0 20px rgba(255,165,0,0.6);
+      }
+      .spark-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 999;
+      }
+
+      @keyframes float-up {
+        0% {
+          opacity: 0;
+          transform: translate(var(--x), var(--y)) scale(0.6);
+        }
+        10% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform:
+            translate(
+              calc(var(--x) + var(--drift)),
+              calc(var(--y) - var(--rise))
+            )
+            scale(1.2);
+        }
       }
       @keyframes slideDownBlue{
         0% {
@@ -245,6 +297,22 @@
           transform: translateY(0);
         }
       }
+      @keyframes blue-score-slider {
+          0%   { transform: translateX(-100%); }
+          30%  { transform: translateX(0%); }
+          70%  { transform: translateX(0%); }
+          100% { transform: translateX(-100%); }
+      }
+      @keyframes red-score-slider {
+          0%   { transform: translateX(100%); }
+          30%  { transform: translateX(0%); }
+          70%  { transform: translateX(0%); }
+          100% { transform: translateX(100%); }
+      }
+      @keyframes text-glow{
+        0%{ text-shadow: 0 0 5px white; }
+        100%{ text-shadow: 0 0 20px white; }
+      }
       body{
         background-image: url("https://media.posterstore.com/site_images/685ddd908b7ca77dcb8af940_1207156463_PS50626-4.jpg");
         background-size: cover;
@@ -258,6 +326,7 @@
     </style>
   </head>
   <body>
+    <div class="spark-container"></div>
     <div class = "blue-slider">
         <p class="your-name" id = "your-name">?</p>
     </div>
@@ -302,6 +371,36 @@
       }
       var id = parseQueryParams().id;
       var other = parseQueryParams().other;
+
+
+      //sparks!
+      function createSpark(x, y) {
+        const spark = document.createElement("span");
+        spark.classList.add("spark");
+
+        const rise = 80 + Math.random() * 6000;      // how high
+        const drift = (Math.random() - 0.5) * 40;  // sideways wobble
+
+        spark.style.setProperty("--x", x + "px");
+        spark.style.setProperty("--y", y + "px");
+        spark.style.setProperty("--rise", rise + "px");
+        spark.style.setProperty("--drift", drift + "px");
+        spark.style.animation = `float-up ${1.5 + Math.random() * 10}s ease-out forwards`
+
+        document.querySelector(".spark-container").append(spark);
+
+        spark.addEventListener("animationend", () => spark.remove());
+      }
+      const sparkInterval = setInterval(() => {
+        createSpark(
+          Math.random() * window.innerWidth,
+          window.innerHeight
+        );
+      }, 1);
+      //stops sparks from spawning during match
+      setTimeout(() => {
+        clearInterval(sparkInterval);
+      }, 2000);
       
       document.getElementById("your-name").innerHTML = localStorage.username;
       document.getElementById("other-name").innerHTML = other;
@@ -332,6 +431,13 @@
       let totalReadingTime = 0;
       let totalTypingTime = 0;
 
+      //your score
+      let selfScore = 0;
+      //enemy score
+      let enemyScore = 0;
+      //very important thing
+      let gameEnded = false;
+
       const equationElement = document.getElementById("equation");
       const answerBox = document.getElementById("answer_box");
       const apsElement = document.getElementById("aps");
@@ -354,6 +460,55 @@
           name: localStorage.username
         }))
       };
+
+      //score slider trigger
+      function triggerScoreSlider() {
+        //make answer box acessible again
+        answerBox.disabled = false;
+
+        //remove old score sliders
+        const oldScoreSliders = document.querySelectorAll(".score-slider");
+        oldScoreSliders.forEach(slider => slider.remove());
+
+        //slidersss
+        const scoreSlider = document.createElement("div");
+        scoreSlider.className = "score-slider";
+        scoreSlider.style.backgroundColor = "blue";
+        scoreSlider.style.left = "0";
+        scoreSlider.style.top = "0%";
+        scoreSlider.style.animation = "blue-score-slider 5s forwards";
+
+        const scoreSlider2 = document.createElement("div");
+        scoreSlider2.className = "score-slider";
+        scoreSlider2.style.backgroundColor = "red";
+        scoreSlider2.style.left = "50%";
+        scoreSlider2.style.top = "0%";
+        scoreSlider2.style.animation = "red-score-slider 5s forwards";
+        
+        //text stuff
+        const scoreTextBlue = document.createElement("p");
+        scoreTextBlue.className = "score-text";
+        scoreTextBlue.textContent = selfScore;
+        scoreTextBlue.style.animation = "text-glow 1s infinite alternate";
+        scoreTextBlue.style.left = "50%";
+        scoreTextBlue.style.top = "40%";
+        scoreTextBlue.style.transform = "translate(-50%, -50%)";
+        scoreSlider.appendChild(scoreTextBlue);
+
+        const scoreTextRed = document.createElement("p");
+        scoreTextRed.className = "score-text";
+        scoreTextRed.textContent = enemyScore;
+        scoreTextRed.style.animation = "text-glow 1s infinite alternate";
+        scoreTextRed.style.left = "50%";
+        scoreTextRed.style.top = "40%";
+        scoreTextRed.style.transform = "translate(-50%, -50%)";
+        scoreSlider2.appendChild(scoreTextRed);
+        
+        //appending to doc
+        document.body.appendChild(scoreSlider2);
+        document.body.appendChild(scoreSlider);
+      }
+      triggerScoreSlider();
 
       function sendAttack(damage){
         //send this to enemy
@@ -618,30 +773,42 @@
       }
       
       function endGame() {
+        if(gameEnded){return;}
+        gameEnded = true;
+        enemyScore++;
+        if(enemyScore>=5){
+          ws.send(JSON.stringify({
+            connectMsg:false,
+            victory: true,
+            id: id,
+            name: localStorage.username
+          })); // did not use ai for dis btw
+          window.location.replace('https://cunfuzed.github.io/PERMDAS/multiplayer/duels/duelsend?id='+id+'&other='+other+"&win=false"); //you suck, how could you lose!!!
+        }
         clearInterval(timerInterval);
         clearInterval(attackInterval);
         paused = true;
         answerBox.disabled = true;
-        equationElement.innerHTML = "DEFEAT";
-        ws.send(JSON.stringify({
-          connectMsg:false,
-          victory: true,
-          id: id,
-          name: localStorage.username
-        })) // did not use ai for dis btw
-        
-        location.href = "/PERMDAS/multiplayer/duels/duelsend?id="+id+"&other="+other+"&win=false"; //you suck, how could you lose!!!
-        
+        triggerScoreSlider();
       }
       function victory() {
+        if(gameEnded){return;}
+        gameEnded = true;
+        selfScore++;
+        if(selfScore>=5){
+          ws.send(JSON.stringify({
+            connectMsg:false,
+            victory: true,
+            id: id,
+            name: localStorage.username
+          }));
+          window.location.replace('https://cunfuzed.github.io/PERMDAS/multiplayer/duels/duelsend?id='+id+'&other='+other+"&win=true");//you also suck, how did it take you so long?
+        }
         clearInterval(timerInterval);
         clearInterval(attackInterval);
         paused = true;
         answerBox.disabled = true;
-        // I sure do hope this works
-        location.href = "/PERMDAS/multiplayer/duels/duelsend?id="+id+"&other="+other+"&win=true";
-        
-        // window.location.replace('cunfuzed.github.io/PERMDAS/multiplayer/duels/duelsend');
+        triggerScoreSlider();
       }
       
 
