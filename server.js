@@ -34,7 +34,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Enable CORS
-//app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 // File where data is stored
