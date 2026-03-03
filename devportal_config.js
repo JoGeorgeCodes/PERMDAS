@@ -1,1 +1,1 @@
-var devportal_API = "https://absent-formula-inquiry-platform.trycloudflare.com" //urgent: remove slash at the end
+var devportal_API = "https://turner-ideas-portable-essex.trycloudflare.com" //urgent: remove slash at the end
