@@ -55,7 +55,7 @@
         font-family: "Courier New", Courier, monospace;
         color: white;
         text-shadow: 2px 2px 4px black;
-        z-index: 3;
+        z-index: 10;
         opacity: 0;
         animation: fadeIn 0.5s ease 5s forwards;
       }
@@ -510,6 +510,18 @@
       }
       triggerScoreSlider();
 
+      //reseting game
+      function startNextRound() {
+        gameEnded = false;
+        health = 40;
+        combo = 0;
+        attacksQued = [];
+        updateHealthBar();
+        updateAttackBar();
+        paused = true;
+        // re-trigger countdown from server, or handle locally
+      }
+
       function sendAttack(damage){
         //send this to enemy
 
@@ -546,12 +558,10 @@
             }
             return;
         }
-        if(data.victory) victory();
-        else{
-      	  attacksQued.push(data); // [damage, timestamp]
+        if(data.end){ victory(); return;}
+          attacksQued.push(data); // [damage, timestamp]
           updateAttackBar();
           console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued?.length);
-        }
       };
       
       ws.onclose = () => {
@@ -578,7 +588,6 @@
           typingTimeElement.textContent = `Avg Type: ${avgTyping}s`;
         }
       }
-      
       function switchPhase(newPhase) {
         // Record time spent in current phase
         const phaseElapsed = Date.now() - phaseStartTime;
@@ -593,7 +602,6 @@
         problemPhase = newPhase;
         phaseStartTime = Date.now();
       }
-      
       function startTimer() {
         if (timerStarted) return;
         timerStarted = true;
@@ -606,6 +614,7 @@
         }, 50); // updates 20 times per second
       }
       
+      //generation function
       function generateBag(){
         currentBag = [];
         currentEquationsInBag = [];
@@ -627,45 +636,9 @@
           }
         }
       }
-      
-      function displayOperater(){
-        switch(currentBag[equationNum]){
-          case "+":
-            return "+";
-          break;
-          case "-":
-            return "-";
-          break;
-          case "*":
-            return "×";
-          break;
-          case "/":
-            return "÷";
-          break;
-          
-        }
-      }
-      
-      function displayEquation(){
-        switch(currentBag[equationNum]){
-            case "+":
-              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
-            break;
-            case "-":
-              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
-            break;
-            case "*":
-              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
-            break;
-            case "/":
-              return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
-        }
-      }
-
       function findComboMultiplier(){
         comboMultiplier = combo/30+1;
       }
-      
       function findAttack(){
         findComboMultiplier();
         if(equationNum<8){
@@ -712,7 +685,6 @@
           }
         }
       }
-      
       function findAnswer(){
         switch(currentBag[equationNum]){
             case "+":
@@ -730,6 +702,41 @@
         }
       }
 
+      //display functions
+      function displayOperater(){
+        switch(currentBag[equationNum]){
+          case "+":
+            return "+";
+          break;
+          case "-":
+            return "-";
+          break;
+          case "*":
+            return "×";
+          break;
+          case "/":
+            return "÷";
+          break;
+          
+        }
+      }
+      function displayEquation(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" "+ displayOperater() +" "+ currentEquationsInBag[equationNum][1]+" = ";
+        }
+      }
+
+      //attacks
       function attackTick(){
         const currentTime = Date.now();
         
@@ -752,7 +759,6 @@
           }
         }
       }
-      
       function updateAttackBar() {
         // Calculate total queued attack damage
         let totalAttack = 0;
@@ -764,13 +770,14 @@
         const barHeight = Math.min(totalAttack * 50, 500); // Scale as needed
         attackBarElement.style.height = barHeight + 'px';
       }
-      
       function updateHealthBar() {
         // Update health bar height based on current health (0-100)
         const healthPercentage = Math.max(0, health) / 40;
         const barHeight = healthPercentage * 500;
         healthBarElement.style.height = barHeight + 'px';
       }
+
+      //ending game  
       function handleGameOver(){
         health = 40;
         attacksQued.length = 0;
