@@ -547,9 +547,11 @@
             return;
         }
         if(data.victory) victory();
-      	attacksQued.push(data); // [damage, timestamp]
-        updateAttackBar();
-        console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued?.length);
+        else{
+      	  attacksQued.push(data); // [damage, timestamp]
+          updateAttackBar();
+          console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued?.length);
+        }
       };
       
       ws.onclose = () => {
@@ -745,9 +747,7 @@
             
             // Check for game over
             if(health <= 0){
-              health = 0;
-              updateHealthBar();
-              endGame();
+              handleGameOver();
             }
           }
         }
@@ -771,7 +771,12 @@
         const barHeight = healthPercentage * 500;
         healthBarElement.style.height = barHeight + 'px';
       }
-      
+      function handleGameOver(){
+        health = 40;
+        attacksQued.length = 0;
+        updateHealthBar();
+        endGame();
+      }
       function endGame() {
         if(gameEnded){return;}
         gameEnded = true;
@@ -784,6 +789,14 @@
             name: localStorage.username
           })); // did not use ai for dis btw
           window.location.replace('https://cunfuzed.github.io/PERMDAS/multiplayer/duels/duelsend?id='+id+'&other='+other+"&win=false"); //you suck, how could you lose!!!
+        }else{
+          ws.send(JSON.stringify({
+            connectMsg:false,
+            victory: true,
+            gameOver: true,
+            id: id,
+            name: localStorage.username
+          }));
         }
         clearInterval(timerInterval);
         clearInterval(attackInterval);
