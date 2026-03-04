@@ -584,7 +584,7 @@ wss.on("connection", (ws, req) => {
       var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
       for(otherPlayer of otherPlayers)
         otherPlayer.theirWS.send(JSON.stringify({end: true}))
-      startCountdown();
+      startCountdown(msg.id);
       
 
         
