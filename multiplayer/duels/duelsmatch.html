@@ -551,7 +551,7 @@
             } else if (data.value === "start") {
               paused = false;
               phaseStartTime = Date.now();
-              
+              startNextRound();
               equationElement.textContent = displayEquation();
             } else {
                 equationElement.innerHTML = data.value;
