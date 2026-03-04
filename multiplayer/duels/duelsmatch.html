@@ -625,6 +625,13 @@
           //generating the numbers
           if(currentOperator!== "/"&&currentOperator!== "*"){
             currentEquationsInBag.push([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
+            if(currentOperator==="-"){
+              if(currentEquationsInBag[i][0]<currentEquationsInBag[i][1]){
+                let temp = currentEquationsInBag[i][0];
+                currentEquationsInBag[i][0] = currentEquationsInBag[i][1];
+                currentEquationsInBag[i][1] = temp;
+              }
+            }
           }else{
             let num1 = Math.floor(Math.random() * 12);
             let num2 = Math.floor(Math.random() * 12);
