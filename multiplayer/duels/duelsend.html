@@ -303,8 +303,7 @@
       	});
       	return obj;
       }
-      var id = parseQueryParams().id;
-      var other = parseQueryParams().other;
+      var urlParam = parseQueryParams();
       //some sparks testing
       function createSpark(x, y) {
         const spark = document.createElement("span");
@@ -333,17 +332,18 @@
       const blueScore = document.getElementById("blue-score");
       const redScore  = document.getElementById("red-score");
 
-      blueScore.textContent = "0";
-      redScore.textContent  = "0";
+      blueScore.textContent = urlParam.yourScore;
+      redScore.textContent  = "5";
 
       const endingDisplay = document.getElementById("ending-display");
       
-      endingDisplay.textContent = "VICTORY";
+      if(urlParam.win) endingDisplay.textContent = "VICTORY";
+      else             endingDisplay.textContent = "DEFEAT";
       endingDisplay.setAttribute("style", "animation: victory 8s forwards;");
 
       
-      const BLUE_NAME = "Player 1";
-      const RED_NAME  = "Player 2";
+      const BLUE_NAME = localStorage.username;
+      const RED_NAME  = urlParam.other;
       document.getElementById("blue-name").textContent = BLUE_NAME;
       document.getElementById("red-name").textContent  = RED_NAME;
 
