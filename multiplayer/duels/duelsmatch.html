@@ -559,7 +559,10 @@
             return;
         }
         if(data.end){ victory(); return;}
-          attacksQued.push(data); // [damage, timestamp]
+          //attacksQued.push(data); // [damage, timestamp]
+        
+          // Re-stamp with local time on arrival
+          attacksQued.push([data[0], Date.now()]);
           updateAttackBar();
           console.log("Attack queued:", data[0], "Total attacks:", data.attacksQued?.length);
       };
