@@ -431,6 +431,11 @@
       let totalReadingTime = 0;
       let totalTypingTime = 0;
 
+      
+      // Start attack tick interval
+      let attackInterval = setInterval(attackTick, 100); // Check every 100ms
+      
+      
       //your score
       let selfScore = 0;
       //enemy score
@@ -519,7 +524,8 @@
         updateHealthBar();
         updateAttackBar();
         paused = false;
-        // re-trigger countdown from server, or handle locally
+        clearInterval(attackInterval); // clear any existing one just in case
+        attackInterval = setInterval(attackTick, 100); // restart it
       }
 
       function sendAttack(damage){
@@ -845,9 +851,6 @@
       
 
       generateBag();
-      
-      // Start attack tick interval
-      const attackInterval = setInterval(attackTick, 100); // Check every 100ms
       
        //loop
       setInterval(() => {
