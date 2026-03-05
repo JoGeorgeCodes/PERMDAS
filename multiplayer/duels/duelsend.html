@@ -331,10 +331,14 @@
       
       const blueScore = document.getElementById("blue-score");
       const redScore  = document.getElementById("red-score");
-
-      blueScore.textContent = urlParam.yourScore;
-      redScore.textContent  = "5";
-
+      if(urlParam.win){
+        blueScore.textContent = "5";
+        redScore.textContent  = urlParam.otherScore;
+      }
+      else{
+        blueScore.textContent = urlParam.yourScore;
+        redScore.textContent  = "5";
+      }
       const endingDisplay = document.getElementById("ending-display");
       
       if(urlParam.win) endingDisplay.textContent = "VICTORY";
