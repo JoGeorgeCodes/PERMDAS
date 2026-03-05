@@ -748,6 +748,8 @@
 
       //attacks
       function attackTick(){
+            
+        console.log("tick", attacksQued, Date.now());
         const currentTime = Date.now();
         
         for(let i = attacksQued.length - 1; i >= 0; i--){
