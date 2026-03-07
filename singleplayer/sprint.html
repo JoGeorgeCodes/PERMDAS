@@ -16,6 +16,7 @@
         margin: 50px auto 0;
         font-size: 20px;
         text-align: center;
+        resize: none;
       }
       .header{
         text-align: center;
@@ -25,17 +26,12 @@
       .equation{
         margin-top: 100px;
         text-align: center;
-        margin-right: 350px;
-        font-family: "Courier New", Courier, monospace;
-      }
-      .counter{
-        font-size: 20px;
-        position: absolute;
-        top: 400px;
-        right: 255px;
+        font-size: 60px;
         font-family: "Courier New", Courier, monospace;
       }
       .timer{
+        font-size: 25px;
+        text-align: center;
         font-family: "Courier New", Courier, monospace;
       }
       .highscore{
@@ -45,25 +41,14 @@
         right: 16%;
         font-size: 25px;
       }
-      .aps{
-        font-size: 20px;
+      .stat-box{
         position: absolute;
-        top: 375px;
-        right: 260px;
-        font-family: "Courier New", Courier, monospace;
-      }
-      .reading-time{
+        top: 300px;
+        right: 200px;
+        width: 250px;
+        height: 175px;
+        text-align: left;
         font-size: 20px;
-        position: absolute;
-        top: 325px;
-        right: 260px;
-        font-family: "Courier New", Courier, monospace;
-      }
-      .typing-time{
-        font-size: 20px;
-        position: absolute;
-        top: 350px;
-        right: 260px;
         font-family: "Courier New", Courier, monospace;
       }
       .box{
@@ -75,14 +60,6 @@
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(10px);
         z-index: -1;
-      }
-      body {
-        background-image: url("https://images.fineartamerica.com/images-medium-large-5/sunset-over-mountain-layers-maya-karkalicheva.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        color: white;
       }
       .back{
         backdrop-filter: blur(10px);
@@ -97,10 +74,85 @@
         border: none; 
         cursor: pointer;
         font-family: "Courier New", Courier, monospace;
+        z-index: 3;
         transition: all 0.3s ease;
       }
       .back:hover{
         transform: translateX(50px)
+      }
+      .menu-screen-info {
+        position: fixed;
+        left: 20%;
+        width: 60%;
+        height: 15%;
+        font-size: 20px;
+        font-family: "Courier New", Courier, monospace;
+        background-color: rgb(204, 202, 76);
+        z-index: 2;
+        box-shadow: 2px 2px 5px black;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+      }
+      .menu-screen-start{
+        position: fixed;
+        top: 20%;
+        left: 20%;
+        width: 60%;
+        height: 15%;
+        font-size: 20px;
+        font-family: "Courier New", Courier, monospace;
+        background-color: rgb(204, 202, 76);
+        z-index: 2;
+        box-shadow: 2px 2px 5px black;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+      }
+      .menu-screen-options{
+        position: fixed;
+        top: 40%;
+        left: 20%;
+        width: 60%;
+        height: 15%;
+        font-size: 20px;
+        font-family: "Courier New", Courier, monospace;
+        background-color: rgb(204, 202, 76);
+        z-index: 2;
+        box-shadow: 2px 2px 5px black;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+      }
+      .start-button{
+        width: 150px;
+        height: 50px;
+        translate: 100px;
+        background-color: rgb(237, 235, 83);
+        border: 1px black solid;
+        font-size: 30px;
+        color: green;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px black;
+        cursor: pointer;
+        animation: shine 2s infinite alternate;
+      }
+      body {
+        background-image: url("https://images.fineartamerica.com/images-medium-large-5/sunset-over-mountain-layers-maya-karkalicheva.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
       }
       .record{
         position: absolute;
@@ -136,40 +188,123 @@
         50% {transform: translate(-50%, -40%) scale(7.5); opacity:0.25;}
         100% {transform: translate(-50%, -40%) scale(15); opacity:0;}
       }
+      @keyframes fadeOut{
+        from{
+          opacity: 1;
+        }to{
+          opacity: 0;
+        }
+      }
+      @keyframes shine{
+        from{
+          background-color: rgb(240, 240, 80);
+        }
+        to{
+          background-color: rgb(200, 200, 80)
+        }
+      }
     </style>
   </head>
 
   <body>
-    <div class = "box"></div>
-    <h1 class = "header" id = "header" >40 Equation <span style = "color:yellow">Sprint</span></h1>
-    <p class="highscore" id="highscore">Best Time: --</p>
-    <p class = "equation" id="equation" style="margin-left:250px; font-size:40px;"></p>
-    <p class="timer" id="timer" style="text-align:center; font-size:30px;">
-      Time: 0.00s
-    </p>
-    <p class = "reading-time" id = "reading-time">Avg Read: 0.00s</p>
-    <p class = "typing-time" id = "typing-time">Avg Type: 0.00s</p>
-    <p class = "aps" id = "aps">APS: __.__</p>
-
-    <textarea class = "answer_box" id = "answer_box"></textarea>
-    <p class="counter" id="counter"> Equations Left: 40 </p>
     <a href = "../modes.html"><button class = "back">Modes</button></a>
+    <div class = "menu-screen-info" id = "menu-screen"><div style = "font-size: 30px; align-items: center;">40 Equation Sprint:<div><div style = "font-size: 20px;">Solve 40 equations as fast as you can!</div></div>
+    <div class = "menu-screen-start" id = "menu-screen-start">Click to start:<button class = "start-button">START</button></div>
+    <div class = "menu-screen-options" id = "menu-screen-options"><div style = "font-size: 30px;">Info:</div>-You may not submit to leaderboards without a password<br>-You can create a password in customization<br>-if you do not have a password, your password is blank</div>
 
     <script>
-      
-      if(!localStorage.passwordHash ||localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"){
-        alert("You cannot submit scores to the leaderboard without a password")
-      }
+      let gameStarted = false;
+      function startGame(){
+        gameStarted = true;
+        
+        //removing menu thing
+        const menu_screen_info = document.getElementById("menu-screen");
+        menu_screen_info.style.animation = "fadeOut 1s ease forwards";
+        const menu_screen_start = document.getElementById("menu-screen-start");
+        menu_screen_start.style.animation = "fadeOut 1s ease forwards";
+        const menu_screen_options = document.getElementById("menu-screen-options");
+        menu_screen_options.style.animation = "fadeOut 1s ease forwards";
 
+        menu_screen_info.addEventListener("animationend",()=>{
+          menu_screen_info.remove();
+        });
+        menu_screen_start.addEventListener("animationend",()=>{
+          menu_screen_start.remove();
+        });
+        menu_screen_options.addEventListener("animationend",()=>{
+          menu_screen_options.remove();
+        });
+
+        const back_box = document.createElement("div");
+        back_box.className = "box";
+        document.body.appendChild(back_box);
+        
+        const title = document.createElement("h1");
+        title.className = "header";
+        title.textContent = "40 Equation Sprint";
+        document.body.appendChild(title);
+
+        const equationElement = document.createElement("p");
+        equationElement.className = "equation";
+        equationElement.id = "equation";
+        document.body.appendChild(equationElement);
+
+        const highscore = document.createElement("p");
+        highscore.className = "highscore";
+        highscore.id = "highscore";
+        highscore.innerHTML = "Best Time: --";
+        document.body.appendChild(highscore);
+
+        const timer = document.createElement("p");
+        timer.className = "timer";
+        timer.id = "timer";
+        timer.innerHTML = "Time: 0.00s";
+        document.body.appendChild(timer);
+
+        const statBox = document.createElement("div");
+        statBox.className = "stat-box";
+        document.body.appendChild(statBox);
+
+        const readingTime = document.createElement("p");
+        readingTime.id = "reading-time";
+        readingTime.innerHTML = "Avg Read: 0.00s";
+        statBox.appendChild(readingTime);
+
+        const typingTime = document.createElement("p");
+        typingTime.id = "typing-time";
+        typingTime.innerHTML = "Avg Type: 0.00s";
+        statBox.appendChild(typingTime);
+
+        const aps = document.createElement("p");
+        aps.id = "aps";
+        aps.innerHTML = "APS: __.__";
+        statBox.appendChild(aps);
+
+        const counter = document.createElement("p");
+        counter.id = "counter";
+        counter.innerHTML = "Equations Left: 40";
+        statBox.appendChild(counter);
+
+        const answerBox = document.createElement("textarea");
+        answerBox.className = "answer_box";
+        answerBox.id = "answer_box";
+        document.body.appendChild(answerBox);
+        answerBox.focus();
+      }
+      
+      if(localStorage.passwordHash == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"){
+        //alert("You cannot submit scores to the leaderboard without a password, change your password in the customization menu")
+      }
+  
       function submitFinalScore(finalTime) {
         const username = localStorage.getItem("username");
       
         if (!username) {
           console.error("No username found in localStorage");
-          return Promise.reject("No username");
+          return;
         }
       
-        return fetch(API + "/score", {
+        fetch(API + "/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -181,12 +316,10 @@
         .then(res => res.json())
         .then(data => {
           console.log("Score submitted:", data.user);
-          return data;
         })
         .catch(err => {
           console.error("Score submit failed:", err);
-          alert("Score Submit failed: "+err);
-          throw err;
+          alert("Score Submit failed: "+err)
         });
       }
 
@@ -211,7 +344,6 @@
       let phaseStartTime = Date.now();
       let totalReadingTime = 0;
       let totalTypingTime = 0;
-      let mode = "equations";
       let mistakes = 0;
       let keypresses = 0;
       let recordType = false;
@@ -224,18 +356,6 @@
       let totalGames = localStorage.getItem("totalGames");
       let totalEquations = localStorage.getItem("totalEquations");
       
-      //const vars
-      const timerElement = document.getElementById("timer");
-      const equationElement = document.getElementById("equation");
-      const answerBox = document.getElementById("answer_box");
-      const counterElement = document.getElementById("counter");
-      const highscoreElement = document.getElementById("highscore");
-      const apsElement = document.getElementById("aps");
-      const readingTimeElement = document.getElementById("reading-time");
-      const typingTimeElement = document.getElementById("typing-time");
-      const backGround = document.getElementById("background");
-      const header = document.getElementById("header");
-
       //functions
       function updateAPS() {
         const elapsed = (Date.now() - startTime) / 1000;
@@ -252,11 +372,75 @@
           typingTimeElement.textContent = `Avg Type: ${avgTyping}s`;
         }
       }
-      function updateEquation() {
-        equationElement.textContent = `${firstNum} + ${secondNum} =`;
+
+      //generation and display functions
+      let currentBag = [];
+      let currentEquationsInBag = [];
+      let operations = ["+", "-", "*", "/"];
+      let currentOperator = operations[Math.floor(Math.random() * 4)];
+      let equationNum = 0;
+      function displayEquation(){
+        //displaying
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] +" + "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] +" - "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] +" × "+ currentEquationsInBag[equationNum][1]+" = ";
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0]*currentEquationsInBag[equationNum][1] +" ÷ "+ currentEquationsInBag[equationNum][1]+" = "
+            break;
+        }
       }
-      function findAnswer() {
-        return firstNum + secondNum;
+      function equationGenerate(){
+
+        //generations
+        currentBag = [];
+        currentEquationsInBag = [];
+        for(let i = 0; i < 8; i++){
+          //generating the operators
+          currentOperator = operations[Math.floor(Math.random() * 4)];
+          currentBag.push(currentOperator);
+          //generating the numbers
+          if(currentOperator!== "/"&&currentOperator!== "*"){
+            currentEquationsInBag.push([Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
+            if(currentOperator==="-"){
+              if(currentEquationsInBag[i][0]<currentEquationsInBag[i][1]){
+                let temp = currentEquationsInBag[i][0];
+                currentEquationsInBag[i][0] = currentEquationsInBag[i][1];
+                currentEquationsInBag[i][1] = temp;
+              }
+            }
+          }else{
+            let num1 = Math.floor(Math.random() * 12);
+            let num2 = Math.floor(Math.random() * 12);
+            if(currentOperator==="/"){
+              if(num1 === 0){num1 = 1;}
+              if(num2 === 0){num2 = 1;}
+            }
+            currentEquationsInBag.push([num1, num2]);
+          }
+        }
+      }
+      function findAnswer(){
+        switch(currentBag[equationNum]){
+            case "+":
+              return currentEquationsInBag[equationNum][0] + currentEquationsInBag[equationNum][1];
+            break;
+            case "-":
+              return currentEquationsInBag[equationNum][0] - currentEquationsInBag[equationNum][1];
+            break;
+            case "*":
+              return currentEquationsInBag[equationNum][0] * currentEquationsInBag[equationNum][1];
+            break;
+            case "/":
+              return currentEquationsInBag[equationNum][0];
+            break;
+        }
       }
       function switchPhase(newPhase) {
         // Record time spent in current phase
@@ -287,7 +471,7 @@
       }
       function updateHighscoreDisplay() {
         if (bestTime !== null) {
-          highscoreElement.textContent = `Best Time: ${bestTime.toFixed(2)}s`;
+          highScoreElement.textContent = `Best Time: ${bestTime.toFixed(2)}s`;
         }
       }
       function unlockAchievement(achievementId) {
@@ -309,184 +493,201 @@
         document.body.appendChild(secondRecord);
         console.log("Record animation created:", text);
       }
-
-      updateEquation();
-      updateHighscoreDisplay();
-
-      let paused = false;
-      //checking for reset
-      document.addEventListener("keydown", (event) =>{
-        if (event.key === resetGame){
-          location.reload();
-          event.preventDefault();
-        }
-      });
-
-      //stuff for text area/answer box
-      answerBox.addEventListener("keyup", (event) => {
-        keypresses++;
-        if (paused) return;
-
-        // Switch to typing phase when user starts typing
-        if (problemPhase === "reading") {
-          switchPhase("typing");
-        }
-
-        if (!timerStarted){
-          startTimer();
-        }
-
-        if (event.key === answerQuestion) {
-          event.preventDefault();
-
-          if (Number(answerBox.value) === findAnswer()) {
-            let equationsComp = parseInt(totalEquations || 0) + 1;
-            localStorage.setItem("totalEquations", equationsComp.toString());
-            totalEquations = equationsComp.toString();
-            firstNum = Math.floor(Math.random()*10);
-            secondNum = Math.floor(Math.random()*10);
-            switchPhase("reading");
-            updateEquation();
-            equationsLeft--;
-            equationsCompleted++;
-            counterElement.textContent = `Equations Left: ${equationsLeft}`;
-
-            //0-int achievement
-            if(keypresses === 1){
-              unlockAchievement("zero_input");
+      function checkForInput(){
+        if(gameStarted){
+          document.addEventListener("keydown", (event) =>{
+             if (event.key === resetGame){
+               location.reload();
+               event.preventDefault();
+             }
+          });
+          answerBox.addEventListener("keyup", (event) => {
+            keypresses++;
+            if (paused) return;
+  
+            // Switch to typing phase when user starts typing
+            if (problemPhase === "reading") {
+              switchPhase("typing");
             }
-
-            if (equationsLeft <= 0) {
-              clearInterval(timerInterval);
-
-              // adding total games
-              let gamesPlayed = parseInt(totalGames || 0) + 1;
-              localStorage.setItem("totalGames", gamesPlayed.toString());
-
-              // Record final phase time
-              const phaseElapsed = Date.now() - phaseStartTime;
-              if (problemPhase === "typing") {
-                totalTypingTime += phaseElapsed;
-              }
-
-              //high score stuff
-              const finalTime = (Date.now() - startTime) / 1000;
-              
-              // FIRST: Submit the score
-              submitFinalScore(finalTime)
-                .then(() => {
-                  // Wait a bit for server to update
-                  return new Promise(resolve => setTimeout(resolve, 500));
-                })
-                .then(() => {
-                  // NOW check leaderboard position after score is submitted
-                  return fetch(API + "/leaderboard");
-                })
-                .then(res => {
-                  if (!res.ok) throw new Error('Network response was not ok');
-                  return res.json();
-                })
-                .then(data => {
-                  const username = localStorage.getItem("username");
-                  console.log("=== LEADERBOARD CHECK ===");
-                  console.log("Username:", username);
-                  console.log("Final Time:", finalTime);
-                  console.log("Leaderboard data:", data);
-                  console.log("First place:", data[0]);
-                  
-                  // Check for world record
-                  if(data[0] && data[0].name === username && data[0].score === finalTime){
-                    console.log("WORLD RECORD DETECTED!");
-                    record("WORLD RECORD");
-                    recordType = true;
+  
+            if (!timerStarted){
+              startTimer();
+            }
+  
+            if (event.key === answerQuestion) {
+              event.preventDefault();
+  
+              if (Number(answerBox.value) === findAnswer()) {
+                let equationsComp = parseInt(totalEquations || 0) + 1;
+                localStorage.setItem("totalEquations", equationsComp.toString());
+                totalEquations = equationsComp.toString();
+                firstNum = Math.floor(Math.random()*10);
+                secondNum = Math.floor(Math.random()*10);
+                switchPhase("reading");
+                equationElement.textContent = displayEquation();
+                equationsLeft--;
+                equationsCompleted++;
+                counterElement.textContent = `Equations Left: ${equationsLeft}`;
+                equationNum++;
+                if(equationNum>7){
+                  equationNum = 0;
+                  equationGenerate();
+                }
+                equationElement.textContent = displayEquation();
+                //0-int achievement
+                if(keypresses === 1){
+                  unlockAchievement("zero_input");
+                }
+  
+                if (equationsLeft <= 0) {
+                  clearInterval(timerInterval);
+  
+                  // adding total games
+                  let gamesPlayed = parseInt(totalGames || 0) + 1;
+                  localStorage.setItem("totalGames", gamesPlayed.toString());
+  
+                  // Record final phase time
+                  const phaseElapsed = Date.now() - phaseStartTime;
+                  if (problemPhase === "typing") {
+                    totalTypingTime += phaseElapsed;
                   }
-                  // Check for top 3
-                  else {
-                    for(let i = 0; i < data.length; i++){
-                      console.log(`Checking position ${i}: ${data[i].name} with score ${data[i].score}`);
-                      if(data[i].name === username && data[i].score === finalTime){
-                        console.log(`Match found at position ${i}`);
-                        if(i < 3){
-                          console.log("TOP 3 DETECTED!");
-                          record("TOP 3");
-                          recordType = true;
-                          break;
-                        }
-                        else if(i < 10){
-                          console.log("TOP 10 DETECTED!");
-                          record("TOP 10");
-                          recordType = true;
-                          break;
+  
+                  //high score stuff
+                  const finalTime = (Date.now() - startTime) / 1000;
+  
+                  // Check leaderboard position
+                  fetch(API + "/leaderboard")
+                    .then(res => {
+                      if (!res.ok) throw new Error('Network response was not ok');
+                      return res.json();
+                    })
+                    .then(data => {
+                      const username = localStorage.getItem("username");
+  
+                      // Check for world record
+                      if(data[0] && data[0].name === username && data[0].score === finalTime){
+                        record("WORLD RECORD");
+                        recordType = true;
+                      }
+                      // Check for top 3
+                      else {
+                        for(let i = 0; i < data.length; i++){
+                          if(data[i].name === username && data[i].score === finalTime){
+                            if(i < 3){
+                              record("TOP 3");
+                              recordType = true;
+                              break;
+                            }
+                            else if(i < 10){
+                              record("TOP 10");
+                              recordType = true;
+                              break;
+                            }
+                          }
                         }
                       }
-                    }
-                  }
-                  
-                  console.log("Record type triggered:", recordType);
-                  console.log("Best time:", bestTime, "Final time:", finalTime);
-                  
-                  // NOW check for personal best (only if no other record was triggered)
-                  if (bestTime === null || finalTime < bestTime) {
-                    bestTime = finalTime;
-                    if(!recordType){
-                      console.log("PERSONAL BEST DETECTED!");
-                      record("PERSONAL BEST");
-                    } else {
-                      console.log("Personal best achieved but higher record type already shown");
-                    }
-                    localStorage.setItem("bestTime", bestTime.toString());
-                    updateHighscoreDisplay();
-                  }
-                  
-                  console.log("=== END LEADERBOARD CHECK ===");
-                })
-                .catch(err => {
-                  console.error("Sprint leaderboard fetch failed:", err);
-                  
-                  // Still handle personal best even if leaderboard fails
-                  if (bestTime === null || finalTime < bestTime) {
-                    bestTime = finalTime;
-                    record("PERSONAL BEST");
-                    localStorage.setItem("bestTime", bestTime.toString());
-                    updateHighscoreDisplay();
-                  }
-                });
-
-              // Display stats
-              const avgReadingTime = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
-              const avgTypingTime = (totalTypingTime / equationsCompleted / 1000).toFixed(2);
-            
-              //achievements
-              if(finalTime <= 40){unlockAchievement("speed_demon");}
-              if(mistakes <= 0){unlockAchievement("perfect_score");}
-              if(avgReadingTime < 0.8){unlockAchievement("brain");}
-              if(avgTypingTime < 0.2){unlockAchievement("twitch");}
-              unlockAchievement("first_win");
-
-              equationElement.innerHTML = `Sprint complete!<br>Final Time: ${finalTime.toFixed(2)}s`;
-              answerBox.disabled = true;
+  
+                      //check for personal best
+                      if (bestTime === null || finalTime < bestTime) {
+                        bestTime = finalTime;
+                        if(!recordType){
+                          record("PERSONAL BEST");
+                        }
+                        localStorage.setItem("bestTime", bestTime.toString());
+                        updateHighscoreDisplay();
+                      }
+  
+                      console.log("Leaderboard data:", data);
+                    })
+                    .catch(err => {
+                      console.error("Sprint leaderboard fetch failed:", err);
+  
+                      //if agnis server does a kamakazi
+                      if (bestTime === null || finalTime < bestTime) {
+                        bestTime = finalTime;
+                        record("PERSONAL BEST");
+                        localStorage.setItem("bestTime", bestTime.toString());
+                        updateHighscoreDisplay();
+                      }
+                    });
+  
+                  submitFinalScore(finalTime);
+  
+                  // Display stats
+                  const avgReadingTime = (totalReadingTime / equationsCompleted / 1000).toFixed(2);
+                  const avgTypingTime = (totalTypingTime / equationsCompleted / 1000).toFixed(2);
+  
+                  //achievements
+                  if(finalTime <= 40){unlockAchievement("speed_demon");}
+                  if(mistakes <= 0){unlockAchievement("perfect_score");}
+                  if(avgReadingTime < 0.8){unlockAchievement("brain");}
+                  if(avgTypingTime < 0.2){unlockAchievement("twitch");}
+                  unlockAchievement("first_win");
+  
+                  equationElement.innerHTML = `Sprint complete!<br>Final Time: ${finalTime.toFixed(2)}s`;
+                  equationElement.style.fontSize = "40px";
+                  answerBox.disabled = true;
+                  answerBox.value = "";
+  
+                }
+  
+              } else {
+                mistakes++;
+                paused = true;
+                equationElement.innerHTML = "Wrong answer<br>0.5 second penalty";
+                setTimeout(() => {
+                  paused = false;
+                  equationElement.textContent = displayEquation();
+                }, 500);
+              }
+              keypresses = 0;
               answerBox.value = "";
-              
             }
-
-          } else {
-            mistakes++;
-            paused = true;
-            equationElement.innerHTML = "Wrong answer<br>0.5 second penalty";
-            setTimeout(() => {
-              paused = false;
-              updateEquation();
-            }, 500);
-          }
-          keypresses = 0;
-          answerBox.value = "";
+          });
         }
-      });
+      }
+      let paused = false;
+      //checking for reset
       window.addEventListener('load', () => {
         const savedBg = localStorage.getItem('customBackground');
         if (savedBg) {
           document.body.style.backgroundImage = `url('${savedBg}')`;
         }
+      });
+      //start button and stuff
+      const startButton = document.querySelector(".start-button");
+
+      //stuff
+      let equationElement;
+      let answerBox;
+      let timerElement;
+      let counterElement;
+      let apsElement;
+      let readingTimeElement;
+      let typingTimeElement;
+      let highScoreElement;
+      
+      startButton.addEventListener("click", () =>{
+        //starting
+        startGame();
+        
+        //declaration
+        equationElement = document.getElementById("equation");
+        answerBox = document.getElementById("answer_box");
+        timerElement = document.getElementById("timer");
+        counterElement = document.getElementById("counter");
+        apsElement = document.getElementById("aps");
+        readingTimeElement = document.getElementById("reading-time");
+        typingTimeElement = document.getElementById("typing-time");
+        highScoreElement = document.getElementById("highscore");
+        updateHighscoreDisplay();
+        
+        //generation
+        equationGenerate();
+        startTimer();
+        equationElement.textContent = displayEquation();
+        console.log(gameStarted);
+        checkForInput();
       });
     </script>
   </body>
