@@ -1,4 +1,4 @@
-var API = "https://permdas-x8zj.onrender.com/";//URGENT MAKE SURE TO REMOVE SLASH AT END
+var API = "https://permdas-x8zj.onrender.com/";
 
 //of course the programmer forgot
 if (API.endsWith('/')) {
