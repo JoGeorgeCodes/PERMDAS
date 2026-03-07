@@ -582,6 +582,7 @@ wss.on("connection", (ws, req) => {
       var room = rooms[msg.id];
       //send to other player(s)
       var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
+
       for(otherPlayer of otherPlayers)
         otherPlayer.theirWS.send(JSON.stringify({end: true}))
       startCountdown(msg.id);
@@ -591,11 +592,16 @@ wss.on("connection", (ws, req) => {
     }else{
       var room = rooms[msg.id];
 
-        if (!room) {
-            console.log("Room already deleted or doesn't exist.");
-            return; 
-        }
-      var otherPlayers = room.players.filter((p)=>p.name!=msg.name);		
+      if (!room) {
+          console.log("Room already deleted or doesn't exist.");
+          return; 
+      }
+      
+      var otherPlayers = room.players.filter((p)=>p.name!=msg.name);
+      if(otherPlayers.length == 0){
+        return;
+        //why does this ever happen
+      }
       var randPlayer = otherPlayers[0];
 
       randPlayer.theirWS.send(JSON.stringify(msg.damagePacket))
