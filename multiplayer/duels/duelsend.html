@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>End of Match..................... You prolly lost tho</title><!--there may be 2nd title below but im adding it just un case its not-->
+    <script src="../../config.js"></script>
     <style>
       .back{
         backdrop-filter: blur(10px);
@@ -302,6 +304,21 @@
       	});
       	return obj;
       }
+
+      function convertHttpToWs(url) {
+      	try {
+      		const parsed = new URL(url);
+      		if (parsed.protocol === "https:") parsed.protocol = "wss:";
+      		else if (parsed.protocol === "http:") parsed.protocol = "ws:";
+      		return parsed.toString();
+      	} catch (e) {
+      		console.error("Invalid URL:", url);
+      		return null;
+      	}
+      }
+      const wsAPI = convertHttpToWs(API)
+      const ws = new WebSocket(wsAPI);
+      
       var urlParam = parseQueryParams();
       //some sparks testing
       function createSpark(x, y) {
