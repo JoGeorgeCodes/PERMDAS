@@ -55,7 +55,7 @@
         font-family: "Courier New", Courier, monospace;
         color: white;
         text-shadow: 2px 2px 4px black;
-        z-index: 10;
+        z-index: 3;
         opacity: 0;
         animation: fadeIn 0.5s ease 5s forwards;
       }
@@ -210,6 +210,9 @@
         pointer-events: none;
         overflow: visible;
         z-index: 999;
+      }
+      .scenario-dictator{
+        clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
       }
 
       @keyframes float-up {
@@ -437,9 +440,9 @@
       
       
       //your score
-      let selfScore = 0;
+      let selfScore = 4;
       //enemy score
-      let enemyScore = 0;
+      let enemyScore = 4;
       //very important thing
       let gameEnded = false;
 
@@ -474,6 +477,8 @@
         //remove old score sliders
         const oldScoreSliders = document.querySelectorAll(".score-slider");
         oldScoreSliders.forEach(slider => slider.remove());
+        const oldScenario = document.querySelectorAll(".scenario-dictator");
+        oldScenario.forEach(scenario => scenario.remove());
 
         //slidersss
         const scoreSlider = document.createElement("div");
@@ -508,6 +513,47 @@
         scoreTextRed.style.top = "40%";
         scoreTextRed.style.transform = "translate(-50%, -50%)";
         scoreSlider2.appendChild(scoreTextRed);
+
+        //scenarions, match point, tiebreaker, etc
+        let scenarioTrigger = false;
+        const scenario = document.createElement("div");
+        if(selfScore === 4 && enemyScore === 4){
+          scenario.className = "scenario-dictator";
+          scenario.style.backgroundColor = "rgba(255, 255, 0, 0.7)";
+          scenario.textContent = "TIEBREAKER";
+          scenarioTrigger = true;
+        }
+        else if(selfScore === 4){
+          scenario.className = "scenario-dictator";
+          scenario.style.backgroundColor = "rgba(0, 0, 255, 0.7)";
+          scenario.textContent = "MATCH POINT: "+localStorage.username;
+          scenarioTrigger = true;
+        }
+        else if(enemyScore === 4){
+          scenario.className = "scenario-dictator";
+          scenario.style.backgroundColor = "rgba(255, 0, 0, 0.7)";
+          scenario.textContent = "MATCH POINT: "+other;
+          scenarioTrigger = true;
+        }
+
+        if(scenarioTrigger){
+          scenario.style.position = "absolute";
+          scenario.style.width = "200px";
+          scenario.style.height = "50px";
+          scenario.style.top = "90%";
+          scenario.style.left = "50%";
+          scenario.style.display = "flex";
+          scenario.style.justifyContent = "center";
+          scenario.style.alignItems = "center";
+          scenario.style.textAlign = "center";
+          scenario.style.transform = "translateX(-50%)";
+          scenario.style.fontSize = "20px";
+          scenario.style.fontFamily = "Courier New, Courier, monospace";
+          scenario.style.color = "white";
+          scenario.style.fontWeight = "bold";
+          scenario.style.zIndex = "101";
+          document.body.appendChild(scenario);
+        }
         
         //appending to doc
         document.body.appendChild(scoreSlider2);
@@ -755,7 +801,7 @@
       //attacks
       function attackTick(){
             
-        console.log("tick", attacksQued, Date.now());
+        
         const currentTime = Date.now();
         
         for(let i = attacksQued.length - 1; i >= 0; i--){
