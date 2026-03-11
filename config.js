@@ -1,4 +1,6 @@
-var API = "https://permdas-x8zj.onrender.com/";
+
+var API = "https://ben-mothers-inspection-broke.trycloudflare.com";//URGENT MAKE SURE TO REMOVE SLASH AT END
+
 
 //of course the programmer forgot
 if (API.endsWith('/')) {
